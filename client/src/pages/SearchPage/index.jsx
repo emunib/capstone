@@ -1,0 +1,10 @@
+import React from 'react';
+import './style.scss';
+
+function SearchPage() {
+    return (
+        <h1>SearchPage</h1>
+    );
+}
+
+export default SearchPage;
