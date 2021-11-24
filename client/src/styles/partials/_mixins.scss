@@ -1,0 +1,54 @@
+@use "variables" as *;
+@use "sass:math";
+
+// tablet media query
+@mixin tablet {
+  @media screen and (min-width: $tablet-size) {
+    @content
+  }
+}
+
+// desktop media query
+@mixin desktop {
+  @media screen and (min-width: $desktop-size) {
+    @content
+  }
+}
+
+// px to rem
+@function rem($px, $base: 16px) {
+  @return math.div($px, $base) * 1rem;
+}
+
+// flexbox mixin
+@mixin flex-display($direction: null, $align: null, $justify: null, $gap: null) {
+  display: flex;
+  @if $direction {
+    flex-direction: $direction;
+  }
+  @if $align {
+    align-items: $align;
+  }
+  @if $justify {
+    justify-content: $justify;
+  }
+  @if $gap {
+    gap: $gap;
+  }
+}
+
+// font style mixin
+@mixin font-style($size: null, $weight: null, $height: null, $color: null) {
+  @if $size {
+    font-size: $size;
+  }
+  @if $height {
+    line-height: $height;
+  }
+  @if $weight {
+    font-weight: $weight;
+  }
+  @if $color {
+    color: $color;
+  }
+}
