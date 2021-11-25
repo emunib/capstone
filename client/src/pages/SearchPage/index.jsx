@@ -45,10 +45,9 @@ function SearchPage() {
     }
 
     function renderShows() {
-        console.log(!!value, !!loading, !!shows);
         if (!value) return <></>;
         if (loading) return <h2>Loading..</h2>;
-        if (shows.length) return <ul>{shows.map(show => <li key={show.id}>{show.name}</li>)}</ul>;
+        if (shows.length) return <ul>{shows.map(show => <li key={show.id}>{show.name} {show.id}</li>)}</ul>;
         return <h2>No results</h2>;
     }
 
@@ -66,3 +65,4 @@ function SearchPage() {
 }
 
 export default SearchPage;
+;
