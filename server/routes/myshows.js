@@ -1,27 +1,36 @@
 const axios = require('axios');
-const {readData, writeData} = require('../utilities/utilities');
+const {readShows, writeShows} = require('../utilities');
 const querystring = require('querystring');
 const {API_KEY} = require('../config');
 const router = require('express').Router();
 
-router.get('/', async (req, res) => res.json(await readData()));
+router.get('/', async (req, res) => res.json(await readShows()));
 
 router.post('/:id', async (req, res) => {
-    const shows = await readData();
+    const shows = await readShows();
     const id = req.params.id;
 
-    if (!shows.includes(id)) {
-        shows.push(id);
-        await writeData(shows);
+    if (!shows.some(show => show.id === id)) {
+        shows.push({id});
+        await writeShows(shows);
     }
 
     res.json(shows); // decide on appropriate response...
 });
 
-async function getShowDetails(id) {
-    const shows = await readData();
+router.delete('/:id', async (req, res) => {
+    let shows = await readShows();
 
-    if (!shows.includes(id)) return null;
+    shows = shows.filter(show => show.id !== req.params.id);
+    await writeShows(shows);
+
+    res.json(shows); // decide on appropriate response...
+});
+
+async function getShowDetails(id) {
+    const shows = await readShows();
+
+    if (!shows.some(show => show.id === id)) return null;
 
     let {data: showDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${id}?${querystring.stringify({api_key: API_KEY})}`);
     showDetails = (({name, overview, seasons, poster_path, number_of_seasons}) => ({
@@ -67,5 +76,20 @@ router.get('/:id', async (req, res) => {
         res.status(404).json({message: 'invalid show id'});
     }
 });
+
+// router.patch('/:id', async (req, res) => {
+//     const shows = await readShows();
+//     const show = shows.find(show => show.id === req.params.id);
+//
+//     if (show) {
+//         Object.keys(req.body).forEach(key => {
+//             if (Object.keys(show).includes(key)) show[key] = req.body[key];
+//         });
+//         res.json(show);
+//     } else {
+//         res.status(404).json({message: 'invalid show id'});
+//     }
+// });
+
 
 module.exports = router;

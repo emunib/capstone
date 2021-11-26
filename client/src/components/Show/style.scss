@@ -1,0 +1,15 @@
+.show {
+  margin: 10px;
+
+  &>img {
+    width: 200px;
+  }
+
+  &:hover {
+    background-color: silver;
+  }
+}
+
+.following {
+  background-color: red;
+}

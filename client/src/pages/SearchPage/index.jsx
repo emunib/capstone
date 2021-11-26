@@ -1,42 +1,38 @@
 import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
+import Show from '../../components/Show';
 
-const cache = {};
+let cancelToken;
 
 function SearchPage() {
     const [shows, setShows] = useState([]);
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
-    let cancelToken;
 
     async function search(query) {
         setLoading(true);
 
-        if (cancelToken) cancelToken.cancel();
+        if (cancelToken) {
+            cancelToken.cancel();
+        }
 
         cancelToken = axios.CancelToken.source();
         let data;
 
         try {
-            if (cache[query]) {
-                data = cache[query];
-            } else {
-                data = (await axios.post('/search', {query: query}, {cancelToken: cancelToken.token})).data;
-                cache[query] = data;
-            }
+            data = (await axios.post('/search', {query: query}, {cancelToken: cancelToken.token})).data;
         } catch (error) {
             if (axios.isCancel(error)) {
-                // Handle if request was cancelled
                 console.log('Search request cancelled', error.message);
             } else {
-                // Handle usual errors
                 console.log('Something went wrong: ', error.message);
             }
         }
 
         setShows(data);
         setLoading(false);
+        console.log(data);
     }
 
     function onInputChange(e) {
@@ -46,8 +42,8 @@ function SearchPage() {
 
     function renderShows() {
         if (!value) return <></>;
-        if (loading) return <h2>Loading..</h2>;
-        if (shows.length) return <ul>{shows.map(show => <li key={show.id}>{show.name} {show.id}</li>)}</ul>;
+        if (loading || !shows) return <h2>Loading..</h2>;
+        if (shows.length) return <div>{shows.map(show => <Show show={show}/>)}</div>;
         return <h2>No results</h2>;
     }
 
@@ -65,4 +61,3 @@ function SearchPage() {
 }
 
 export default SearchPage;
-;
