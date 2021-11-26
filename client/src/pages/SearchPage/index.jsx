@@ -13,9 +13,7 @@ function SearchPage() {
     async function search(query) {
         setLoading(true);
 
-        if (cancelToken) {
-            cancelToken.cancel();
-        }
+        if (cancelToken) cancelToken.cancel();
 
         cancelToken = axios.CancelToken.source();
         let data;
@@ -32,7 +30,6 @@ function SearchPage() {
 
         setShows(data);
         setLoading(false);
-        console.log(data);
     }
 
     function onInputChange(e) {

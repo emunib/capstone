@@ -4,14 +4,16 @@ const querystring = require('querystring');
 const {API_KEY} = require('../config');
 const router = require('express').Router();
 
-router.get('/', async (req, res) => res.json(await readShows()));
+router.get('/', async (req, res) => {
+    res.json(await readShows());
+});
 
 router.post('/:id', async (req, res) => {
     const shows = await readShows();
     const id = req.params.id;
 
     if (!shows.some(show => show.id === id)) {
-        shows.push({id});
+        shows.push(req.body);
         await writeShows(shows);
     }
 
@@ -21,7 +23,7 @@ router.post('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
     let shows = await readShows();
 
-    shows = shows.filter(show => show.id !== req.params.id);
+    shows = shows.filter(show => show.id != req.params.id);
     await writeShows(shows);
 
     res.json(shows); // decide on appropriate response...
