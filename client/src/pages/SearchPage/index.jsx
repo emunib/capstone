@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
+import {Divider, Form, Header, Card, Segment} from 'semantic-ui-react';
 import Show from '../../components/Show';
 
 let cancelToken;
@@ -38,22 +39,32 @@ function SearchPage() {
     }
 
     function renderShows() {
-        if (!value) return <></>;
-        if (loading || !shows) return <h2>Loading..</h2>;
-        if (shows.length) return <div>{shows.map(show => <Show show={show}/>)}</div>;
+        if (!value || isLoading()) return;
+        if (shows.length) return <Card.Group itemsPerRow={5} stackable={true} doubling={true}>{shows.map(show => <Show
+            show={show}/>)}</Card.Group>;
         return <h2>No results</h2>;
     }
 
+    function isLoading() {
+        return loading || !shows;
+    }
+
     return (
-        <>
-            <h1>SearchPage</h1>
-
-            <form onSubmit={e => e.preventDefault()}>
-                <input type="text" name="search" value={value} onChange={onInputChange}/>
-            </form>
-
-            {renderShows()}
-        </>
+        <Segment as="section" className="search">
+            <Header as="h1" className="search__title">Search</Header>
+            <Form onSubmit={e => e.preventDefault()}>
+                <Divider className="search__divider"/>
+                <Form.Input
+                    placeholder="Search..."
+                    name="search"
+                    onChange={onInputChange}
+                />
+            </Form>
+            <Divider horizontal className="search__results-title search__divider">Results</Divider>
+            <Segment loading={isLoading()} basic className="search__results">
+                {renderShows()}
+            </Segment>
+        </Segment>
     );
 }
 

@@ -1,3 +1,5 @@
+import './styles/global.scss';
+import 'semantic-ui-css/semantic.min.css';
 import './App.scss';
 import React from 'react';
 import {
@@ -6,6 +8,8 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
+import {Container, Segment} from 'semantic-ui-react';
+import NavBar from './components/NavBar';
 import NotFoundPage from './pages/NotFoundPage';
 import SearchPage from './pages/SearchPage';
 import MyShowsPage from './pages/MyShowsPage';
@@ -13,23 +17,27 @@ import MyShowsPage from './pages/MyShowsPage';
 function App() {
     return (
         <Router>
-            <Switch>
-                <Route exact path="/">
-                    <Redirect to="/search"/>
-                </Route>
-                <Route path="/search">
-                    <SearchPage/>
-                </Route>
-                <Route path="/myshows">
-                    <MyShowsPage/>
-                </Route>
-                <Route exact path="/404">
-                    <NotFoundPage/>
-                </Route>
-                <Route>
-                    <Redirect to="/404"/>
-                </Route>
-            </Switch>
+            <NavBar/>
+            <Container as="main" className="main">
+                <Switch>
+                    <Route exact path="/">
+                        <Redirect to="/discover"/>
+                    </Route>
+                    <Route exact path="/discover">
+                        <SearchPage/>
+                    </Route>
+                    <Route path="/shows">
+                        <MyShowsPage/>
+                    </Route>
+                    <Route exact path="/404">
+                        <NotFoundPage/>
+                    </Route>
+                    <Route>
+                        <Redirect to="/404"/>
+                    </Route>
+                </Switch>
+            </Container>
+            <Segment as="footer" inverted basic> footer </Segment>
         </Router>
     );
 }

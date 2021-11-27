@@ -1,1 +1,12 @@
-@use "styles/partials/global";
+@use "./styles/partials/mixins" as *;
+@use "./styles/partials/variables" as *;
+
+#root {
+  height: 100vh;
+  background-color: $neutral;
+  @include flex-display(column,)
+}
+
+.main {
+  flex-grow: 1;
+}

@@ -1,15 +1,11 @@
-.show {
-  margin: 10px;
+@use "../../styles/partials/mixins" as *;
 
-  &>img {
-    width: 200px;
+.show-card {
+  position: relative;
+
+  &__btn {
+    position: absolute !important;
+    top: rem(12px);
+    right: rem(8px);
   }
-
-  &:hover {
-    background-color: silver;
-  }
-}
-
-.following {
-  background-color: red;
 }
