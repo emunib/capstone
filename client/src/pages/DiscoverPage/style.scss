@@ -1,0 +1,40 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+#root {
+  .discover {
+    @include flex-display(column);
+    flex-grow: 1;
+
+    &__header {
+      text-align: center;
+    }
+
+    &__menu {
+      justify-content: center;
+    }
+
+    &__search-item {
+      width: rem(400px);
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    &__results-title {
+      margin: rem(32px) 0;
+
+      @include tablet {
+        margin: rem(32px) rem(128px) rem(16px);
+      }
+    }
+
+    &__results {
+      @include flex-display(column, center);
+      flex-grow: 1;
+
+      &--empty {
+        justify-content: center;
+      }
+    }
+  }
+}

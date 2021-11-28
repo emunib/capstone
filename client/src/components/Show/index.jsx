@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, {useState} from 'react';
-import cx from 'classnames';
 import './style.scss';
 import {Button, Card, Image} from 'semantic-ui-react';
 
@@ -25,7 +24,7 @@ function Show({show}) {
     const cardColor = () => {
         if (hovering) return 'blue';
         if (following) return 'yellow';
-        return '';
+        return 'white';
     };
 
     return (

@@ -2,11 +2,12 @@
 @use "./styles/partials/variables" as *;
 
 #root {
-  height: 100vh;
+  min-height: 100vh;
   background-color: $neutral;
-  @include flex-display(column,)
-}
+  @include flex-display(column);
 
-.main {
-  flex-grow: 1;
+  .main {
+    @include flex-display(column);
+    flex-grow: 1;
+  }
 }

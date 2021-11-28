@@ -8,37 +8,38 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
-import {Container, Segment} from 'semantic-ui-react';
+import {Container} from 'semantic-ui-react';
 import NavBar from './components/NavBar';
 import NotFoundPage from './pages/NotFoundPage';
-import SearchPage from './pages/SearchPage';
+import SearchPage from './pages/DiscoverPage';
 import MyShowsPage from './pages/MyShowsPage';
 
 function App() {
     return (
         <Router>
-            <NavBar/>
-            <Container as="main" className="main">
-                <Switch>
-                    <Route exact path="/">
-                        <Redirect to="/discover"/>
-                    </Route>
-                    <Route exact path="/discover">
-                        <SearchPage/>
-                    </Route>
-                    <Route path="/shows">
-                        <MyShowsPage/>
-                    </Route>
-                    <Route exact path="/404">
-                        <NotFoundPage/>
-                    </Route>
-                    <Route>
-                        <Redirect to="/404"/>
-                    </Route>
-                </Switch>
-            </Container>
-            <Segment as="footer" inverted basic> footer </Segment>
+                <NavBar/>
+                <Container as="main" className="main">
+                    <Switch>
+                        <Route exact path="/">
+                            <Redirect to="/discover"/>
+                        </Route>
+                        <Route exact path="/discover">
+                            <SearchPage/>
+                        </Route>
+                        <Route path="/shows">
+                            <MyShowsPage/>
+                        </Route>
+                        <Route exact path="/404">
+                            <NotFoundPage/>
+                        </Route>
+                        <Route>
+                            <Redirect to="/404"/>
+                        </Route>
+                    </Switch>
+                </Container>
+            {/*<Segment as="footer" inverted basic> footer </Segment>*/}
         </Router>
+
     );
 }
 

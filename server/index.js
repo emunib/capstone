@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use('/search', require('./routes/search'))
-app.use('/popular', require('./routes/popular'))
+app.use('/shows', require('./routes/shows'))
 app.use('/myshows', require('./routes/myshows'))
 
 app.listen(PORT, () => {
