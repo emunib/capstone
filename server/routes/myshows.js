@@ -44,16 +44,18 @@ async function getShowDetails(id) {
         overview,
         numSeasons: number_of_seasons,
         img: `https://image.tmdb.org/t/p/original${poster_path}`,
-        seasons: seasons.map(({id, name, overview, poster_path, season_number}) => ({
-            id,
+        seasons: seasons.map(({id: snId, name, overview, poster_path, season_number}) => ({
+            id: snId,
+            showId: id,
             name,
             overview,
+            watched: false,
             seasonNum: season_number,
-            img: `https://image.tmdb.org/t/p/original${poster_path}`
+            img: `https://image.tmdb.org/t/p/original${poster_path}` // TODO: PLACEHOLDER IMG
         }))
     }))(showDetails);
 
-    const episodes = await Promise.all(showDetails.seasons.map(({seasonNum}) => getSeasonEpisodes(id, seasonNum)));
+    const episodes = await Promise.all(showDetails.seasons.map(season => getSeasonEpisodes(id, season.id, season.seasonNum)));
     showDetails.seasons.forEach((season, i) => {
         season.episodes = episodes[i];
     });
@@ -61,12 +63,15 @@ async function getShowDetails(id) {
     return showDetails;
 }
 
-async function getSeasonEpisodes(id, num) {
-    const {data: seasonDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${id}/season/${num}?${querystring.stringify({api_key: API_KEY})}`);
-    return seasonDetails.episodes.map(({id, episode_number, name, overview, air_date, still_path}) => ({
-        id,
+async function getSeasonEpisodes(shId, snId, num) {
+    const {data: seasonDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${shId}/season/${num}?${querystring.stringify({api_key: API_KEY})}`);
+    return seasonDetails.episodes.map(({id: epId, episode_number, name, overview, air_date, still_path}) => ({
+        id: epId,
+        showId: shId,
+        seasonId: snId,
         name,
         overview,
+        watched: false,
         date: air_date,
         episodeNum: episode_number,
         img: `https://image.tmdb.org/t/p/original${still_path}`
@@ -84,23 +89,53 @@ async function getSeasonEpisodes(id, num) {
 //     }
 // });
 
-// router.patch('/:id', async (req, res) => {
-//     const shows = await readShows();
-//     const show = shows.find(show => show.id == req.params.id);
-//
-//     if (show) {
-//         Object.keys(req.body).forEach(key => {
-//             if (Object.keys(show).includes(key)) show[key] = req.body[key];
-//         });
-//         res.json(show);
-//     } else {
-//         res.status(404).json({message: 'invalid show id'});
-//     }
-// });
+router.patch('/episodes/:id', async (req, res) => {
+    const shows = await readShows();
+    let episode, season;
+    shows.forEach(show => show.seasons.forEach(sn => sn.episodes.forEach(ep => {
+        if (ep.id == req.params.id) {
+            Object.keys(req.body).forEach(key => {
+                if (Object.keys(ep).includes(key)) ep[key] = req.body[key];
+            });
+            episode = ep;
+            season = sn;
+        }
+    })));
 
-// router.get('/:id/latest', async (req, res) => {
-//     const show =
-// })
+    if (episode) {
+        season.watched = season.episodes.every(ep => ep.watched);
+        await writeShows(shows);
+
+        res.json(episode);
+    } else {
+        res.status(404).json({message: 'invalid episode id'});
+    }
+});
+
+router.get('/:id/latest', async (req, res) => {
+    const shows = await readShows();
+    const show = shows.find(show => show.id == req.params.id);
+
+    if (show) {
+        const unwatched = show.seasons.filter(season => !season.watched);
+
+        if (unwatched.length > 0) {
+            // get all episodes in single array
+            const latest = unwatched.flatMap(season => season.episodes)
+                // get all unwatched episodes
+                .filter(episode => !episode.watched)
+                // get oldest episode
+                .reduce((prev, curr) =>
+                    new Date(prev.date.replace(/-/g, '\/')) <= new Date(curr.date.replace(/-/g, '\/')) ? prev : curr);
+
+            res.json(latest);
+        } else {
+            res.json({}); // TODO: CODE 203?
+        }
+    } else {
+        res.status(404).json({message: 'invalid show id'});
+    }
+});
 
 
 module.exports = router;
