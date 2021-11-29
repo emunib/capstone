@@ -66,7 +66,7 @@
         "showId": "71914",
         "name": "Season 1",
         "overview": "",
-        "watched": true,
+        "watched": false,
         "seasonNum": 1,
         "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg",
         "episodes": [
@@ -120,7 +120,7 @@
             "seasonId": 88733,
             "name": "Blood Calls Blood",
             "overview": "Perrin and Egwene run into a familiar face. Mat and Rand see strange ones. Moiraine and Lan mourn their loss.",
-            "watched": true,
+            "watched": false,
             "date": "2021-12-02",
             "episodeNum": 5,
             "img": "https://image.tmdb.org/t/p/originalnull"
@@ -128,10 +128,10 @@
           {
             "id": 2356399,
             "showId": "71914",
-            "seasonId": true,
+            "seasonId": 88733,
             "name": "The Flame of Tar Valon",
             "overview": "Moiraine faces the consequences of her actions. Mat faces the darkness in himself. Egwene faces the most powerful woman in the world.",
-            "watched": true,
+            "watched": false,
             "date": "2021-12-09",
             "episodeNum": 6,
             "img": "https://image.tmdb.org/t/p/original/7hsl7FPEqI8OBDtAr6N3oH6Iodh.jpg"
@@ -142,7 +142,7 @@
             "seasonId": 88733,
             "name": "The Dark Along the Ways",
             "overview": "Moiraine and her charges are diverted from their path by an unexpected encounter. This diversion, though, reveals many things — Moiraine’s true goal, Lan’s past, the fractures that have grown in the group, and the identity of the Dragon Reborn.",
-            "watched": true,
+            "watched": false,
             "date": "2021-12-16",
             "episodeNum": 7,
             "img": "https://image.tmdb.org/t/p/originalnull"
@@ -153,7 +153,7 @@
             "seasonId": 88733,
             "name": "The Eye of the World",
             "overview": "Season finale. For twenty years, Moiraine has dreamed and worked towards this moment. But she can't stop the Dragon Reborn from seeing the appeal of the Dark.",
-            "watched": true,
+            "watched": false,
             "date": "2021-12-23",
             "episodeNum": 8,
             "img": "https://image.tmdb.org/t/p/originalnull"

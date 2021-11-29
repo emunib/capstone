@@ -121,14 +121,21 @@ router.get('/:id/latest', async (req, res) => {
 
         if (unwatched.length > 0) {
             // get all episodes in single array
-            const latest = unwatched.flatMap(season => season.episodes)
+            const unwatchedAired = unwatched.flatMap(season => season.episodes)
                 // get all unwatched episodes
                 .filter(episode => !episode.watched)
+                // get all aired episodes
+                .filter(episode => new Date(episode.date.replace(/-/g, '\/')) < Date.now());
+
+            if (unwatchedAired.length) {
                 // get oldest episode
-                .reduce((prev, curr) =>
+                const latest = unwatchedAired.reduce((prev, curr) =>
                     new Date(prev.date.replace(/-/g, '\/')) <= new Date(curr.date.replace(/-/g, '\/')) ? prev : curr);
 
-            res.json(latest);
+                res.json(latest);
+            } else {
+                res.json({}); // TODO: CODE 203?
+            }
         } else {
             res.json({}); // TODO: CODE 203?
         }
