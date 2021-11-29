@@ -1,0 +1,33 @@
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
+
+#root {
+  .episode {
+    position: relative;
+    padding: 1rem !important;
+    background-color: white;
+
+    &:hover {
+      background-color: $highlight;
+    }
+
+    &__title {
+      //height: rem(36px);
+    }
+
+    &__date {
+      color: rgba(0, 0, 0, .4);
+      margin-top: 0;
+    }
+
+    &__subtitle {
+      text-transform: uppercase;
+    }
+
+    &__btn {
+      position: absolute;
+      top: rem(16px);
+      right: rem(16px);
+    }
+  }
+}

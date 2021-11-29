@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
 import {Button, Card, Image} from 'semantic-ui-react';
+import LoadingButton from '../LoadingButton';
 
 function Show({show}) {
     const [following, setFollowing] = useState(show.following);
@@ -36,10 +37,11 @@ function Show({show}) {
             <Image className="show-card__img" src={show.img}/>
             <Card.Content>
                 <Card.Header>{show.name}</Card.Header>
-                <Button className="show-card__btn"
-                        icon="plus"
-                        onClick={onClick}
-                        color={following ? 'yellow' : ''}/>
+                <LoadingButton className="show-card__btn"
+                               icon="plus"
+                               onClick={onClick}
+                               active={following}
+                />
             </Card.Content>
         </Card>
     );

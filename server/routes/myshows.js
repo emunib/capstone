@@ -9,31 +9,34 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/:id', async (req, res) => {
-    const shows = await readShows();
     const id = req.params.id;
+    const [shows, show] = await Promise.all([readShows(), getShowDetails(id)]);
 
-    if (!shows.some(show => show.id === id)) {
-        shows.push(req.body);
+    if (!shows.some(show => show.id == id)) {
+        shows.push(show);
         await writeShows(shows);
     }
 
-    res.json(shows); // decide on appropriate response...
+    res.json(show);
 });
 
 router.delete('/:id', async (req, res) => {
     let shows = await readShows();
 
-    shows = shows.filter(show => show.id != req.params.id);
+    let show;
+    shows = shows.filter(s => {
+        if (s.id == req.params.id) {
+            show = s;
+            return false;
+        }
+        return true;
+    });
     await writeShows(shows);
 
-    res.json(shows); // decide on appropriate response...
+    res.json(show);
 });
 
 async function getShowDetails(id) {
-    const shows = await readShows();
-
-    if (!shows.some(show => show.id === id)) return null;
-
     let {data: showDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${id}?${querystring.stringify({api_key: API_KEY})}`);
     showDetails = (({name, overview, seasons, poster_path, number_of_seasons}) => ({
         name,
@@ -60,28 +63,30 @@ async function getShowDetails(id) {
 
 async function getSeasonEpisodes(id, num) {
     const {data: seasonDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${id}/season/${num}?${querystring.stringify({api_key: API_KEY})}`);
-    return seasonDetails.episodes.map(({id, episode_number, name, overview, still_path}) => ({
+    return seasonDetails.episodes.map(({id, episode_number, name, overview, air_date, still_path}) => ({
         id,
         name,
         overview,
+        date: air_date,
         episodeNum: episode_number,
         img: `https://image.tmdb.org/t/p/original${still_path}`
     }));
 }
 
-router.get('/:id', async (req, res) => {
-    const showDetails = await getShowDetails(req.params.id);
-
-    if (showDetails) {
-        res.json(showDetails);
-    } else {
-        res.status(404).json({message: 'invalid show id'});
-    }
-});
+//
+// router.get('/:id', async (req, res) => {
+//     const showDetails = await getShowDetails(req.params.id);
+//
+//     if (showDetails) {
+//         res.json(showDetails);
+//     } else {
+//         res.status(404).json({message: 'invalid show id'});
+//     }
+// });
 
 // router.patch('/:id', async (req, res) => {
 //     const shows = await readShows();
-//     const show = shows.find(show => show.id === req.params.id);
+//     const show = shows.find(show => show.id == req.params.id);
 //
 //     if (show) {
 //         Object.keys(req.body).forEach(key => {
@@ -92,6 +97,10 @@ router.get('/:id', async (req, res) => {
 //         res.status(404).json({message: 'invalid show id'});
 //     }
 // });
+
+// router.get('/:id/latest', async (req, res) => {
+//     const show =
+// })
 
 
 module.exports = router;
