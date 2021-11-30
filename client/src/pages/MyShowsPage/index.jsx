@@ -1,40 +1,58 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Item} from 'semantic-ui-react';
+import {Header, Icon, Item, Segment} from 'semantic-ui-react';
 import Episode from '../../components/Episode';
-import LoadingButton from '../../components/LoadingButton';
-import Show from '../../components/Show';
 
 function MyShowsPage() {
-    const [shows, setShows] = useState([]);
+    const [episodes, setEpisodes] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    async function getShows() {
         setLoading(true);
-        axios.get('/myshows').then(({data}) => {
-            setShows(data);
-            setLoading(false);
-        });
+        const {data: shows} = await axios.get('/myshows');
+        const eps = await Promise.all(shows.map(({id}) => axios.get(`/myshows/${id}/latest`)));
+        setLoading(false);
+        setEpisodes(eps.map((ep, i) => ({...ep.data, showName: shows[i].name})));
+    }
+
+    useEffect(() => {
+        getShows();
     }, []);
 
     function renderShows() {
-        if (loading || !shows) return <h2>Loading..</h2>;
-        if (shows.length) return <div>{shows.map(show => <Show show={show}/>)}</div>;
-        return <h2>No results</h2>;
+        console.log(episodes);
+        if (episodes.length && episodes.every(ep => ep.id)) {
+            return episodes.filter(ep => ep.id).map(ep =>
+                <Segment>
+                    <Item.Group divided unstackable>
+                        <Episode key={ep.id} episode={ep} onClick={() => {
+                            getLatest(ep.id);
+                        }}/>
+                    </Item.Group>
+                </Segment>
+            );
+        } else {
+            return <Header as="h3" color="grey" icon>
+                <Icon name="thumbs up"/>
+                No episodes remaining.
+                <Header.Subheader>
+                    You're all caught up!
+                </Header.Subheader>
+            </Header>;
+            // TODO: USE LABELS IN CORNER OF CARD INSTEAD OF BUTTONS
+        }
     }
 
-    const [activeIndex, setActiveIndex] = useState();
-
-    function handleClick(e, titleProps) {
-        const {index} = titleProps;
-        const newIndex = activeIndex === index ? -1 : index;
-        setActiveIndex(newIndex);
+    async function getLatest(id) {
+        await axios.patch(`/myshows/episodes/${id}`, {watched: true});
+        getShows();
     }
+
 
     return (
         <>
-            <h1>MyShowsPage</h1>
+            <Header as="h1">Up Next</Header>
 
             {/*{renderShows()}*/}
             {/*<Accordion fluid styled>*/}
@@ -57,12 +75,7 @@ function MyShowsPage() {
             {/*        </p>*/}
             {/*    </Accordion.Content>*/}
             {/*</Accordion>*/}
-            <Item.Group divided unstackable>
-
-                <Episode/>
-                <Episode/>
-                <Episode/>
-            </Item.Group>
+            {renderShows()}
         </>
     );
 }

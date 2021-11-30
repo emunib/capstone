@@ -14,11 +14,13 @@ function LoadingButton({onClick, active: activeProp, ...props}) {
                     {...(activeState ? {color: 'yellow'} : {})}
                     {...(onClick ? {
                         onClick: async e => {
-                            setLoading(true);
-                            await onClick(e);
-                            setLoading(false);
-                            setActiveState(!activeState);
-                            buttonRef.current.blur();
+                            if (!loading) {
+                                setLoading(true);
+                                await onClick(e);
+                                setLoading(false);
+                                setActiveState(!activeState);
+                                buttonRef.current.blur();
+                            }
                         }
                     } : {})}
             />

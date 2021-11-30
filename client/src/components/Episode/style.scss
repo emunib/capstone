@@ -29,5 +29,9 @@
       top: rem(16px);
       right: rem(16px);
     }
+
+    &__img {
+      @include flex-display(row, center, center)
+    }
   }
 }
