@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
             name,
             id,
             overview,
-            following: myShows.some(show => show.id == id),
+            // following: myShows.some(show => show.id == id),
             img: `https://image.tmdb.org/t/p/original${poster_path}`
         }));
 
