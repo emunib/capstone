@@ -88,7 +88,7 @@ async function createShow(id) {
         img: data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : '/images/placeholder.png'
     };
 
-    show.seasons = data.seasons.map(season => ({
+    show.seasons = new Map(data.seasons.map(season => ([season.season_number, {
         id: season.id,
         name: season.name,
         overview: season.overview,
@@ -96,12 +96,27 @@ async function createShow(id) {
         seasonNum: season.season_number,
         numEpisodes: season.episode_count,
         img: season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : show.img
-    }));
+    }])));
+
+    for (let season of show.seasons.values()) { // TODO: USE PROMISE.ALL
+        season.episodes = await getEpisodes(id, season.seasonNum, season.img);
+    }
 
     return show;
 }
 
-//
+async function getEpisodes(id, num, img) {
+    const {data} = await axios.get(`${baseURL}${id}/season/${num}?${qs.encode(queryParams)}`);
+
+    return new Map(data.episodes.map(ep => [ep.episode_number, {
+        episodeNum: ep.episode_number,
+        date: new Date(ep.air_date.replace(/-/g, '\/')),
+        name: ep.name,
+        overview: ep.overview,
+        img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img
+    }]));
+}
+
 // router.delete('/:id', async (req, res) => {
 //     let shows = await readShows();
 //

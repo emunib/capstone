@@ -2,29 +2,6 @@
   "dataType": "Map",
   "value": [
     [
-      88329,
-      {
-        "id": 88329,
-        "name": "Hawkeye",
-        "overview": "Former Avenger Clint Barton has a seemingly simple mission: get back to his family for Christmas. Possible? Maybe with the help of Kate Bishop, a 22-year-old archer with dreams of becoming a superhero. The two are forced to work together when a presence from Barton’s past threatens to derail far more than the festive spirit.",
-        "watched": false,
-        "numSeasons": 1,
-        "numEpisodes": 6,
-        "img": "https://image.tmdb.org/t/p/original/pqzjCxPVc9TkVgGRWeAoMmyqkZV.jpg",
-        "seasons": [
-          {
-            "id": 122165,
-            "name": "Season 1",
-            "overview": "",
-            "watched": false,
-            "seasonNum": 1,
-            "numEpisodes": 6,
-            "img": "https://image.tmdb.org/t/p/original/rp378be6RvDNGuPWn4eNCCCxXbE.jpg"
-          }
-        ]
-      }
-    ],
-    [
       94605,
       {
         "id": 94605,
@@ -34,49 +11,469 @@
         "numSeasons": 2,
         "numEpisodes": 9,
         "img": "https://image.tmdb.org/t/p/original/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg",
-        "seasons": [
-          {
-            "id": 134187,
-            "name": "Season 1",
-            "overview": "",
-            "watched": false,
-            "seasonNum": 1,
-            "numEpisodes": 9,
-            "img": "https://image.tmdb.org/t/p/original/xQ6GijOFnxTyUzqiwGpVxgfcgqI.jpg"
-          },
-          {
-            "id": 220416,
-            "name": "Season 2",
-            "overview": "",
-            "watched": false,
-            "seasonNum": 2,
-            "numEpisodes": 0,
-            "img": "https://image.tmdb.org/t/p/original/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg"
-          }
-        ]
+        "seasons": {
+          "dataType": "Map",
+          "value": [
+            [
+              1,
+              {
+                "id": 134187,
+                "name": "Season 1",
+                "overview": "",
+                "watched": false,
+                "seasonNum": 1,
+                "numEpisodes": 9,
+                "img": "https://image.tmdb.org/t/p/original/xQ6GijOFnxTyUzqiwGpVxgfcgqI.jpg",
+                "episodes": {
+                  "dataType": "Map",
+                  "value": [
+                    [
+                      1,
+                      {
+                        "episodeNum": 1,
+                        "date": "2021-11-06T06:00:00.000Z",
+                        "name": "Welcome to the Playground",
+                        "overview": "Orphaned sisters Vi and Powder bring trouble to Zaun's underground streets in the wake of a heist in posh Piltover.",
+                        "img": "https://image.tmdb.org/t/p/original/g7dMkFJvJECDYoL0TRzGQCfF3xD.jpg"
+                      }
+                    ],
+                    [
+                      2,
+                      {
+                        "episodeNum": 2,
+                        "date": "2021-11-06T06:00:00.000Z",
+                        "name": "Some Mysteries Are Better Left Unsolved",
+                        "overview": "Idealistic inventor Jayce attempts to harness magic through science—despite his mentor's warnings. Criminal kingpin Silco tests a powerful substance.",
+                        "img": "https://image.tmdb.org/t/p/original/49HmMAu69lbBFhApVE7JaULEbwE.jpg"
+                      }
+                    ],
+                    [
+                      3,
+                      {
+                        "episodeNum": 3,
+                        "date": "2021-11-06T06:00:00.000Z",
+                        "name": "The Base Violence Necessary for Change",
+                        "overview": "An epic showdown between old rivals results in a fateful moment for Zaun. Jayce and Viktor risk it all for their research.",
+                        "img": "https://image.tmdb.org/t/p/original/rWgfZJ9F0bUxvSW6Ak2KfboXUih.jpg"
+                      }
+                    ],
+                    [
+                      4,
+                      {
+                        "episodeNum": 4,
+                        "date": "2021-11-13T06:00:00.000Z",
+                        "name": "Happy Progress Day!",
+                        "overview": "With Piltover prospering from their tech, Jayce and Viktor weigh their next move. A familiar face re-emerges from Zaun to wreak havoc.",
+                        "img": "https://image.tmdb.org/t/p/original/7CYgTZUqI80HeJgN686sYW3f9y2.jpg"
+                      }
+                    ],
+                    [
+                      5,
+                      {
+                        "episodeNum": 5,
+                        "date": "2021-11-13T06:00:00.000Z",
+                        "name": "Everybody Wants to Be My Enemy",
+                        "overview": "Rogue enforcer Caitlyn tours the undercity to track down Silco. Jayce puts a target on his back trying to root out Piltover corruption.",
+                        "img": "https://image.tmdb.org/t/p/original/72Ti7nTKEAPgx4VSggb1ksl31rm.jpg"
+                      }
+                    ],
+                    [
+                      6,
+                      {
+                        "episodeNum": 6,
+                        "date": "2021-11-13T06:00:00.000Z",
+                        "name": "When These Walls Come Tumbling Down",
+                        "overview": "An eager protégé undermines his mentor on the council as a magical tech rapidly evolves. With authorities in pursuit, Jinx must face her past.",
+                        "img": "https://image.tmdb.org/t/p/original/9imUyzKnw5oPE75HTLoXXODOR9O.jpg"
+                      }
+                    ],
+                    [
+                      7,
+                      {
+                        "episodeNum": 7,
+                        "date": "2021-11-20T06:00:00.000Z",
+                        "name": "The Boy Savior",
+                        "overview": "Caitlyn and Vi meet an ally in Zaun’s streets and head into a frenzied battle with a common foe. Viktor makes a dire decision.",
+                        "img": "https://image.tmdb.org/t/p/original/3HVZjh2IL3f9UPLp9AmjGd06aUW.jpg"
+                      }
+                    ],
+                    [
+                      8,
+                      {
+                        "episodeNum": 8,
+                        "date": "2021-11-20T06:00:00.000Z",
+                        "name": "Oil and Water",
+                        "overview": "Disowned heir Mel and her visiting mother trade combat tactics. Caitlyn and Vi forge an unlikely alliance. Jinx undergoes a startling change.",
+                        "img": "https://image.tmdb.org/t/p/original/4PhdO5SvOBvrsj6IUx52ii1mtNy.jpg"
+                      }
+                    ],
+                    [
+                      9,
+                      {
+                        "episodeNum": 9,
+                        "date": "2021-11-20T06:00:00.000Z",
+                        "name": "The Monster You Created",
+                        "overview": "Perilously close to war, the leaders of Piltover and Zaun reach an ultimatum. But a fateful standoff changes both cities forever.",
+                        "img": "https://image.tmdb.org/t/p/original/dbnGqpGWUjLcTVQxr5k1V3no8BB.jpg"
+                      }
+                    ]
+                  ]
+                }
+              }
+            ],
+            [
+              2,
+              {
+                "id": 220416,
+                "name": "Season 2",
+                "overview": "",
+                "watched": false,
+                "seasonNum": 2,
+                "numEpisodes": 0,
+                "img": "https://image.tmdb.org/t/p/original/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg",
+                "episodes": {
+                  "dataType": "Map",
+                  "value": []
+                }
+              }
+            ]
+          ]
+        }
       }
     ],
     [
-      93405,
+      71914,
       {
-        "id": 93405,
-        "name": "Squid Game",
-        "overview": "Hundreds of cash-strapped players accept a strange invitation to compete in children's games—with high stakes. But, a tempting prize awaits the victor.",
+        "id": 71914,
+        "name": "The Wheel of Time",
+        "overview": "Follow Moiraine, a member of the shadowy and influential all-female organization called the “Aes Sedai” as she embarks on a dangerous, world-spanning journey with five young men and women. Moiraine believes one of them might be the reincarnation of an incredibly powerful individual, whom prophecies say will either save humanity or destroy it.",
         "watched": false,
         "numSeasons": 1,
-        "numEpisodes": 9,
-        "img": "https://image.tmdb.org/t/p/original/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
-        "seasons": [
-          {
-            "id": 131977,
-            "name": "Season 1",
-            "overview": "Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits — with deadly high stakes.",
-            "watched": false,
-            "seasonNum": 1,
-            "numEpisodes": 9,
-            "img": "https://image.tmdb.org/t/p/original/pcPcE1mtc2XetRy6XcjI76fsUfK.jpg"
-          }
-        ]
+        "numEpisodes": 8,
+        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg",
+        "seasons": {
+          "dataType": "Map",
+          "value": [
+            [
+              0,
+              {
+                "id": 220998,
+                "name": "Specials",
+                "overview": "The Wheel of Time: Origins, and the aftershow, Inside the Wheel of Time. Origins is a series of animated short films that tell several stories set during the years and centuries before the events of the TV series and is available via the  Amazon Prime Video X-Ray feature.",
+                "watched": false,
+                "seasonNum": 0,
+                "numEpisodes": 7,
+                "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg",
+                "episodes": {
+                  "dataType": "Map",
+                  "value": [
+                    [
+                      1,
+                      {
+                        "episodeNum": 1,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "Origins: The Breaking of the World",
+                        "overview": "Detailing the Breaking of the World, the cataclysmic event caused when all male channelers went mad as a result of the source of their magic being corrupted by The Dark One.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      2,
+                      {
+                        "episodeNum": 2,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "Origins: The Fall of Menetheren",
+                        "overview": "Explains the Fall of Manetheren, a city-state that once stood in the Two Rivers region.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      3,
+                      {
+                        "episodeNum": 3,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "Origins: The Greatest Warder",
+                        "overview": "",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      4,
+                      {
+                        "episodeNum": 4,
+                        "date": "2021-11-23T06:00:00.000Z",
+                        "name": "Inside the Wheel of Time: Episode 1 (ft Marcus Rutherford)",
+                        "overview": "In the inaugural episode of the official The Wheel of Time after-show, The Dusty Wheel’s Matt Hatch welcomes actor Marcus Rutherford to talk about his portrayal of Perrin Aybara. Then, the Inside the Wheel of Time panel breaks down Episodes 1-3, shares their thoughts on where the series is headed, and exclusive behind-the-scenes content.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      5,
+                      {
+                        "episodeNum": 5,
+                        "date": "2021-11-25T06:00:00.000Z",
+                        "name": "Origins: Saidin, Saidar, Stone",
+                        "overview": "",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      6,
+                      {
+                        "episodeNum": 6,
+                        "date": "2021-11-30T06:00:00.000Z",
+                        "name": "Inside the Wheel of Time: Episode 2 (ft Zoë Robins)",
+                        "overview": "Matt Hatch welcomes actor Zoë Robins to talk about her portrayal of Two Rivers Wisdom Nynaeve al'Meara. Also, the Inside the Wheel of Time panel breaks down Episode 4 - Logain’s story, the Aes Sedai, and if Mat is someone who can be trusted. Plus - more exclusive behind-the-scenes content.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      7,
+                      {
+                        "episodeNum": 7,
+                        "date": "2021-12-02T06:00:00.000Z",
+                        "name": "Origins: The White Tower",
+                        "overview": "",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ]
+                  ]
+                }
+              }
+            ],
+            [
+              1,
+              {
+                "id": 88733,
+                "name": "Season 1",
+                "overview": "",
+                "watched": false,
+                "seasonNum": 1,
+                "numEpisodes": 8,
+                "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg",
+                "episodes": {
+                  "dataType": "Map",
+                  "value": [
+                    [
+                      1,
+                      {
+                        "episodeNum": 1,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "Leavetaking",
+                        "overview": "A strange noblewoman arrives in a remote mountain village, claiming one of five youths is the reincarnation of an ancient power who once destroyed the world – and will do so again, if she’s not able to discover which of them it is. But they all have less time than they think.",
+                        "img": "https://image.tmdb.org/t/p/original/ucVwvH0NqJC5LdN1C8d4qfaLgDt.jpg"
+                      }
+                    ],
+                    [
+                      2,
+                      {
+                        "episodeNum": 2,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "Shadow's Waiting",
+                        "overview": "Moiraine and Lan lead the four villagers to safety, unsure which is the one from the prophecy. But the friends are equally unsure about their rescuers, especially once they see how far Moiraine is willing to go for her mission – and how far astray Lan is willing to lead them.",
+                        "img": "https://image.tmdb.org/t/p/original/t1xvBOQdODX2n7EH6ldLBeIGonD.jpg"
+                      }
+                    ],
+                    [
+                      3,
+                      {
+                        "episodeNum": 3,
+                        "date": "2021-11-18T06:00:00.000Z",
+                        "name": "A Place of Safety",
+                        "overview": "Moiraine and Lan find help in an unexpected – and unwanted – quarter, as the separated villagers try to find their way back to each other, or at least to refuge. But they all soon learn how far the Dark One’s reach extends, and how few they can trust on the road.",
+                        "img": "https://image.tmdb.org/t/p/original/fEJrLcvcH5Dikcfv3hrzA2uvw8q.jpg"
+                      }
+                    ],
+                    [
+                      4,
+                      {
+                        "episodeNum": 4,
+                        "date": "2021-11-25T06:00:00.000Z",
+                        "name": "The Dragon Reborn",
+                        "overview": "Moiraine struggles with uncertainty while Lan struggles with their new companion. Rand wonders about Mat and Mat starts to wonder at himself. Egwene and Perrin take their first steps down a different path. An incredible new power is unleashed on the world.",
+                        "img": "https://image.tmdb.org/t/p/original/yRFsTWVi5oaDzEfY1RxMaqZheAi.jpg"
+                      }
+                    ],
+                    [
+                      5,
+                      {
+                        "episodeNum": 5,
+                        "date": "2021-12-02T06:00:00.000Z",
+                        "name": "Blood Calls Blood",
+                        "overview": "Perrin and Egwene run into a familiar face. Mat and Rand see strange ones. Moiraine and Lan mourn their loss.",
+                        "img": "https://image.tmdb.org/t/p/original/mG0msmGey6EJ2KPdKV0EROzZPxo.jpg"
+                      }
+                    ],
+                    [
+                      6,
+                      {
+                        "episodeNum": 6,
+                        "date": "2021-12-09T06:00:00.000Z",
+                        "name": "The Flame of Tar Valon",
+                        "overview": "Moiraine faces the consequences of her actions. Mat faces the darkness in himself. Egwene faces the most powerful woman in the world.",
+                        "img": "https://image.tmdb.org/t/p/original/7hsl7FPEqI8OBDtAr6N3oH6Iodh.jpg"
+                      }
+                    ],
+                    [
+                      7,
+                      {
+                        "episodeNum": 7,
+                        "date": "2021-12-16T06:00:00.000Z",
+                        "name": "The Dark Along the Ways",
+                        "overview": "Moiraine and her charges are diverted from their path by an unexpected encounter. This diversion, though, reveals many things — Moiraine’s true goal, Lan’s past, the fractures that have grown in the group, and the identity of the Dragon Reborn.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ],
+                    [
+                      8,
+                      {
+                        "episodeNum": 8,
+                        "date": "2021-12-23T06:00:00.000Z",
+                        "name": "The Eye of the World",
+                        "overview": "Season finale. For twenty years, Moiraine has dreamed and worked towards this moment. But she can't stop the Dragon Reborn from seeing the appeal of the Dark.",
+                        "img": "https://image.tmdb.org/t/p/original/mpgDeLhl8HbhI03XLB7iKO6M6JE.jpg"
+                      }
+                    ]
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+      }
+    ],
+    [
+      131927,
+      {
+        "id": 131927,
+        "name": "Dexter: New Blood",
+        "overview": "10 years after Dexter went missing in the eye of Hurricane Laura, we find him living under an assumed name in the small town of Iron Lake, New York.  Dexter may be embracing his new life, but in the wake of unexpected events in this close-knit community, his Dark Passenger beckons.",
+        "watched": false,
+        "numSeasons": 1,
+        "numEpisodes": 10,
+        "img": "https://image.tmdb.org/t/p/original/9EBKgrFIsCFSV1RZKWhYUdbtGiv.jpg",
+        "seasons": {
+          "dataType": "Map",
+          "value": [
+            [
+              1,
+              {
+                "id": 207411,
+                "name": "Season 1",
+                "overview": "",
+                "watched": false,
+                "seasonNum": 1,
+                "numEpisodes": 10,
+                "img": "https://image.tmdb.org/t/p/original/onnYrRDxvfEAjeXHxq1BoyUF419.jpg",
+                "episodes": {
+                  "dataType": "Map",
+                  "value": [
+                    [
+                      1,
+                      {
+                        "episodeNum": 1,
+                        "date": "2021-11-07T06:00:00.000Z",
+                        "name": "Cold Snap",
+                        "overview": "For the past decade, Dexter has been living a quiet, isolated life far away from the temptations of his past. When a local hotshot begins behaving recklessly, and a mysterious stranger seems to be on Dexter’s trail, he questions whether he can continue to suppress the murderous urgings of his Dark Passenger.",
+                        "img": "https://image.tmdb.org/t/p/original/igyYWp2f69LIMMLFZzuMvoSdA8n.jpg"
+                      }
+                    ],
+                    [
+                      2,
+                      {
+                        "episodeNum": 2,
+                        "date": "2021-11-14T06:00:00.000Z",
+                        "name": "Storm of Fuck",
+                        "overview": "When a simple missing person case turns into a crime scene, Dexter’s cabin becomes home base for the search and rescue. Terrible timing for Dexter, who is trying to reunite with his long lost son, Harrison. As Angela and Harrison become acquainted, Dexter struggles to keep his old and new worlds separate.",
+                        "img": "https://image.tmdb.org/t/p/original/8JeRign9jzxne1UhnyozvxkPZSB.jpg"
+                      }
+                    ],
+                    [
+                      3,
+                      {
+                        "episodeNum": 3,
+                        "date": "2021-11-21T06:00:00.000Z",
+                        "name": "Smoke Signals",
+                        "overview": "Dexter hopes to have a chance to make things right with Harrison, which is proving to be tough to do when there’s a full-fledged crime investigation that Dexter himself has caused. Harrison joins the high school wrestling team and quickly makes a name for himself at school. Meanwhile, a true crime podcaster from LA arrives in Iron Lake and befriends Dexter’s police chief girlfriend.",
+                        "img": "https://image.tmdb.org/t/p/original/3W6oNm9o4lk2csH4cEKA6MDESjh.jpg"
+                      }
+                    ],
+                    [
+                      4,
+                      {
+                        "episodeNum": 4,
+                        "date": "2021-11-28T06:00:00.000Z",
+                        "name": "H is for Hero",
+                        "overview": "The father of the person whom Dexter killed makes a surprising announcement which could prove to be a huge problem for Dexter. Meanwhile, Dexter discovers Harrison was involved in a serious incident at the high school. And now this young newcomer is considered a hero to the entire town. Angela digs deeper into a missing persons case.",
+                        "img": "https://image.tmdb.org/t/p/original/a3bU98DH7BMkz4IBUn0tLPzxA0E.jpg"
+                      }
+                    ],
+                    [
+                      5,
+                      {
+                        "episodeNum": 5,
+                        "date": "2021-12-05T06:00:00.000Z",
+                        "name": "Runaway",
+                        "overview": "Dexter’s method of protecting his son from drugs unleashes his Dark Passenger in a very impulsive way. Meanwhile Angela and Molly take a trip to New York City that leaves them wondering about a well-respected member of the community.",
+                        "img": "https://image.tmdb.org/t/p/original/iVEa7gHM4eHd9KOQ5FvvuyX1NqV.jpg"
+                      }
+                    ],
+                    [
+                      6,
+                      {
+                        "episodeNum": 6,
+                        "date": "2021-12-12T06:00:00.000Z",
+                        "name": "Too Many Tuna Sandwiches",
+                        "overview": "Someone in Iron Lake has discovered Jim Lindsay’s secret identity, sending Dexter on the prowl to find out who it was. This pursuit leads him to realize that he might not be the only serial killer in town. Meanwhile Harrison spirals out of control during a wrestling match and Angela makes a dark discovery of her own.",
+                        "img": "https://image.tmdb.org/t/p/original/3MQoJGTLPxmguUpx1ES0mN3pE5.jpg"
+                      }
+                    ],
+                    [
+                      7,
+                      {
+                        "episodeNum": 7,
+                        "date": "2021-12-19T06:00:00.000Z",
+                        "name": "Skin of Her Teeth",
+                        "overview": "Dexter is worried that a serial killer may have set its sights on someone he cares deeply about. So, he turns from predator to protector… a role he’s not comfortable playing. Meanwhile Angela arrests someone from Iron Lake who may be the culprit of a cold case that is near and dear to her heart.  Dexter and Harrison run into some more bumps in the road in their relationship, leading Harrison to turn to a very dangerous person as his father figure.",
+                        "img": "https://image.tmdb.org/t/p/original/onnYrRDxvfEAjeXHxq1BoyUF419.jpg"
+                      }
+                    ],
+                    [
+                      8,
+                      {
+                        "episodeNum": 8,
+                        "date": "2021-12-26T06:00:00.000Z",
+                        "name": "Big Game",
+                        "overview": "Dexter fights for his life in the woods of Iron Lake, leading to a confrontation in an abandoned summer camp. Is there a better place for a serial killer to confront another violent killer? Harrison finds himself at a crossroads between two father figures who can lead him down two very different paths. Meanwhile Angela starts to make some disturbing discoveries of her own. ",
+                        "img": "https://image.tmdb.org/t/p/original/onnYrRDxvfEAjeXHxq1BoyUF419.jpg"
+                      }
+                    ],
+                    [
+                      9,
+                      {
+                        "episodeNum": 9,
+                        "date": "2022-01-02T06:00:00.000Z",
+                        "name": "Episode 9",
+                        "overview": "",
+                        "img": "https://image.tmdb.org/t/p/original/onnYrRDxvfEAjeXHxq1BoyUF419.jpg"
+                      }
+                    ],
+                    [
+                      10,
+                      {
+                        "episodeNum": 10,
+                        "date": "2022-01-09T06:00:00.000Z",
+                        "name": "Sins of the Father",
+                        "overview": "",
+                        "img": "https://image.tmdb.org/t/p/original/onnYrRDxvfEAjeXHxq1BoyUF419.jpg"
+                      }
+                    ]
+                  ]
+                }
+              }
+            ]
+          ]
+        }
       }
     ]
   ]
