@@ -19,12 +19,11 @@ router.post('/', async (req, res) => {
             axios.get(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`)
         ]);
 
-        const shows = data.results.map(({name, id, overview, poster_path}) => ({
+        const shows = data.results.map(({name, id, poster_path}) => ({
             name,
             id,
-            overview,
-            // following: myShows.some(show => show.id == id),
-            img: `https://image.tmdb.org/t/p/original${poster_path}`
+            following: myShows.has(id),
+            img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : '/images/placeholder.png'
         }));
 
         res.json(shows);

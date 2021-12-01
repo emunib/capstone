@@ -1,1 +1,83 @@
-{"dataType":"Map","value":[]}
+{
+  "dataType": "Map",
+  "value": [
+    [
+      88329,
+      {
+        "id": 88329,
+        "name": "Hawkeye",
+        "overview": "Former Avenger Clint Barton has a seemingly simple mission: get back to his family for Christmas. Possible? Maybe with the help of Kate Bishop, a 22-year-old archer with dreams of becoming a superhero. The two are forced to work together when a presence from Barton’s past threatens to derail far more than the festive spirit.",
+        "watched": false,
+        "numSeasons": 1,
+        "numEpisodes": 6,
+        "img": "https://image.tmdb.org/t/p/original/pqzjCxPVc9TkVgGRWeAoMmyqkZV.jpg",
+        "seasons": [
+          {
+            "id": 122165,
+            "name": "Season 1",
+            "overview": "",
+            "watched": false,
+            "seasonNum": 1,
+            "numEpisodes": 6,
+            "img": "https://image.tmdb.org/t/p/original/rp378be6RvDNGuPWn4eNCCCxXbE.jpg"
+          }
+        ]
+      }
+    ],
+    [
+      94605,
+      {
+        "id": 94605,
+        "name": "Arcane",
+        "overview": "Amid the stark discord of twin cities Piltover and Zaun, two sisters fight on rival sides of a war between magic technologies and clashing convictions.",
+        "watched": false,
+        "numSeasons": 2,
+        "numEpisodes": 9,
+        "img": "https://image.tmdb.org/t/p/original/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg",
+        "seasons": [
+          {
+            "id": 134187,
+            "name": "Season 1",
+            "overview": "",
+            "watched": false,
+            "seasonNum": 1,
+            "numEpisodes": 9,
+            "img": "https://image.tmdb.org/t/p/original/xQ6GijOFnxTyUzqiwGpVxgfcgqI.jpg"
+          },
+          {
+            "id": 220416,
+            "name": "Season 2",
+            "overview": "",
+            "watched": false,
+            "seasonNum": 2,
+            "numEpisodes": 0,
+            "img": "https://image.tmdb.org/t/p/original/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg"
+          }
+        ]
+      }
+    ],
+    [
+      93405,
+      {
+        "id": 93405,
+        "name": "Squid Game",
+        "overview": "Hundreds of cash-strapped players accept a strange invitation to compete in children's games—with high stakes. But, a tempting prize awaits the victor.",
+        "watched": false,
+        "numSeasons": 1,
+        "numEpisodes": 9,
+        "img": "https://image.tmdb.org/t/p/original/dDlEmu3EZ0Pgg93K2SVNLCjCSvE.jpg",
+        "seasons": [
+          {
+            "id": 131977,
+            "name": "Season 1",
+            "overview": "Hundreds of cash-strapped players accept a strange invitation to compete in children's games. Inside, a tempting prize awaits — with deadly high stakes.",
+            "watched": false,
+            "seasonNum": 1,
+            "numEpisodes": 9,
+            "img": "https://image.tmdb.org/t/p/original/pcPcE1mtc2XetRy6XcjI76fsUfK.jpg"
+          }
+        ]
+      }
+    ]
+  ]
+}

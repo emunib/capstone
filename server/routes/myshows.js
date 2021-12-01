@@ -7,29 +7,31 @@ const baseURL = 'https://api.themoviedb.org/3/tv/';
 const queryParams = {
     api_key: API_KEY
 };
-
-
+// TODO: APPROPRIATE RESPONSES FOR ERROR, PATCH,POST,DELETE
+// get all followed shows
 router.get('/', async (req, res) => {
-    res.json(await getAllShows());
+    const followingShows = await readShows();
+    res.json(Array.from(followingShows.values()));
 });
 
+// get a followed show
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const followingShows = await readShows();
-
     if (followingShows.has(id)) {
-        res.json(await getShow(id));
+        res.json(followingShows.get(id));
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }
 });
 
+// add show to followed
 router.post('/', async (req, res) => {
-    const id = req.body.id;
+    const id = parseInt(req.body.id);
     const followingShows = await readShows();
 
     if (!followingShows.has(id)) {
-        const show = await getShow(id);
+        const show = await createShow(id);
         followingShows.set(id, show);
         await writeShows(followingShows);
         res.json(show);
@@ -38,12 +40,13 @@ router.post('/', async (req, res) => {
     }
 });
 
+// remove show from followed
 router.delete('/:id', async (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
     const followingShows = await readShows();
 
     if (followingShows.has(id)) {
-        const show = await getShow(id);
+        const show = followingShows.get(id);
         followingShows.delete(id);
         await writeShows(followingShows);
         res.json(show);
@@ -52,28 +55,44 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-
-async function getAllShows() {
+// update followed show, specifically for setting watched property
+router.patch('/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
     const followingShows = await readShows();
-    return Promise.all(Array.from(followingShows.keys(), id => getShow(id)));
-}
 
-async function getShow(id) {
+    if (followingShows.has(id)) {
+        const data = req.body;
+
+        if (data.watched === true || data.watched === false) {
+            const show = followingShows.get(id);
+            show.watched = data.watched;
+            await writeShows(followingShows);
+            res.json(show);
+        } else {
+            res.status(404).json({message: 'No show with that id was found'});
+        }
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
+});
+
+async function createShow(id) {
     const {data} = await axios.get(`${baseURL}${id}?${qs.encode(queryParams)}`);
     const show = {
-        id: data.id.toString(),
+        id: data.id,
         name: data.name,
         overview: data.overview,
-        following: true,
+        watched: false,
         numSeasons: data.number_of_seasons,
         numEpisodes: data.number_of_episodes,
         img: data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : '/images/placeholder.png'
     };
 
     show.seasons = data.seasons.map(season => ({
-        id: season.id.toString(),
+        id: season.id,
         name: season.name,
         overview: season.overview,
+        watched: false,
         seasonNum: season.season_number,
         numEpisodes: season.episode_count,
         img: season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : show.img

@@ -10,12 +10,10 @@ function Show({show}) {
 
     async function onClick() {
         if (following) {
-            show.following = false;
             await axios.delete(`/myshows/${show.id}`);
 
         } else {
-            show.following = true;
-            await axios.post(`/myshows/${show.id}`, show);
+            await axios.post('/myshows', {id: show.id});
         }
         setFollowing(!following);
     }
