@@ -88,7 +88,7 @@ async function createShow(id) {
         img: data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : '/images/placeholder.png'
     };
 
-    show.seasons = new Map(data.seasons.map(season => ([season.season_number, {
+    let seasonData = data.seasons.map(season => ([season.season_number, {
         id: season.id,
         name: season.name,
         overview: season.overview,
@@ -96,7 +96,15 @@ async function createShow(id) {
         seasonNum: season.season_number,
         numEpisodes: season.episode_count,
         img: season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : show.img
-    }])));
+    }]));
+
+    // if the show has a season 0 for specials move it to the end
+    if (seasonData.length && seasonData[0][0] === 0) {
+        const [first, ...rest] = seasonData;
+        seasonData = [...rest, first];
+    }
+
+    show.seasons = new Map(seasonData);
 
     for (let season of show.seasons.values()) { // TODO: USE PROMISE.ALL
         season.episodes = await getEpisodes(id, season.seasonNum, season.img);
@@ -113,89 +121,47 @@ async function getEpisodes(id, num, img) {
         date: new Date(ep.air_date.replace(/-/g, '\/')),
         name: ep.name,
         overview: ep.overview,
+        watched: false,
         img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img
     }]));
 }
 
-// router.delete('/:id', async (req, res) => {
-//     let shows = await readShows();
-//
-//     let show;
-//     shows = shows.filter(s => {
-//         if (s.id == req.params.id) {
-//             show = s;
-//             return false;
-//         }
-//         return true;
-//     });
-//     await writeShows(shows);
-//
-//     res.json(show);
-// });
-//
-// async function getShowDetails(id) {
-//     let {data: showDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${id}?${querystring.stringify({api_key: API_KEY})}`);
-//     showDetails = (({name, overview, seasons, poster_path, number_of_seasons}) => ({
-//         name,
-//         id,
-//         overview,
-//         numSeasons: number_of_seasons,
-//         img: `https://image.tmdb.org/t/p/original${poster_path}`,
-//         seasons: seasons.map(({id: snId, name, overview, poster_path, season_number}) => ({
-//             id: snId,
-//             name,
-//             overview,
-//             watched: false,
-//             seasonNum: season_number,
-//             img: `https://image.tmdb.org/t/p/original${poster_path}` // TODO: PLACEHOLDER IMG
-//         }))
-//     }))(showDetails);
-//
-//     const episodes = await Promise.all(showDetails.seasons.map(season => getSeasonEpisodes(id, season.id, season.seasonNum)));
-//     showDetails.seasons.forEach((season, i) => {
-//         season.episodes = episodes[i];
-//     });
-//
-//     return showDetails;
-// }
-//
-// async function getSeasonEpisodes(shId, snId, num) { // TODO: CLEAN UP / REFRACTOR
-//     const {data: seasonDetails} = await axios.get(`https://api.themoviedb.org/3/tv/${shId}/season/${num}?${querystring.stringify({api_key: API_KEY})}`);
-//     return seasonDetails.episodes.map(({id: epId, episode_number, name, overview, air_date, still_path}) => ({
-//         id: epId,
-//         name,
-//         overview,
-//         seasonNum: num,
-//         watched: false,
-//         date: air_date,
-//         episodeNum: episode_number,
-//         img: `https://image.tmdb.org/t/p/original${still_path}`
-//     }));
-// }
-//
-// router.patch('/episodes/:id', async (req, res) => {
-//     const shows = await readShows();
-//     let episode, season;
-//     shows.forEach(show => show.seasons.forEach(sn => sn.episodes.forEach(ep => { // TODO: SIMPLIFY TO JUST WATCHED PROPERTY?
-//         if (ep.id == req.params.id) {
-//             Object.keys(req.body).forEach(key => {
-//                 if (Object.keys(ep).includes(key)) ep[key] = req.body[key];
-//             });
-//             episode = ep;
-//             season = sn;
-//         }
-//     })));
-//
-//     if (episode) {
-//         season.watched = season.episodes.every(ep => ep.watched);
-//         await writeShows(shows);
-//
-//         res.json(episode);
-//     } else {
-//         res.status(404).json({message: 'invalid episode id'});
-//     }
-// });
-//
+router.get('/episodes/next', async (req, res) => {
+    const followingShows = await readShows();
+    const nextEpisodes = [];
+
+    for (let show of followingShows.values()) {
+        if (show.watched) continue;
+
+        const nextSeasonNum = Array.from(show.seasons.keys()).find(num => !show.seasons.get(num).watched);
+        if (nextSeasonNum === undefined) continue;
+
+        const nextSeason = show.seasons.get(nextSeasonNum);
+        const nextEpisodeNum = Array.from(nextSeason.episodes.keys()).find(num => !nextSeason.episodes.get(num).watched);
+
+        const nextEpisode = {
+            ...nextSeason.episodes.get(nextEpisodeNum),
+            showName: show.name,
+            seasonNum: nextSeasonNum,
+            showId: show.id
+        };
+        nextEpisodes.push(nextEpisode);
+    }
+    res.json(nextEpisodes);
+});
+
+function setEpisodeWatched(show, seasonNum, episodeNum, watched) {
+
+}
+
+function setSeasonWatched(show, seasonNum, watched) {
+
+}
+
+function setShowWatched(show, watched) {
+
+}
+
 // router.get('/:id/latest', async (req, res) => {
 //     const shows = await readShows();
 //     const show = shows.find(show => show.id == req.params.id);
