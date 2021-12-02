@@ -119,26 +119,25 @@ router.patch('/:id', async (req, res) => {
     }
 });
 
+// get up next episode for each show
 router.get('/episodes/next', async (req, res) => {
     const followingShows = await readShows();
     const nextEpisodes = [];
 
     for (let show of followingShows.values()) {
-        if (show.watched) continue;
+        const episodes = [];
 
-        const nextSeasonNum = Array.from(show.seasons.keys()).find(num => !show.seasons.get(num).watched);
-        if (nextSeasonNum === undefined) continue;
+        for (const season of show.seasons.values()) {
+            episodes.push(...Array.from(season.episodes.values(), ep => ({
+                ...ep,
+                showName: show.name,
+                seasonNum: season.seasonNum,
+                showId: show.id
+            })));
+        }
 
-        const nextSeason = show.seasons.get(nextSeasonNum);
-        const nextEpisodeNum = Array.from(nextSeason.episodes.keys()).find(num => !nextSeason.episodes.get(num).watched);
-
-        const nextEpisode = {
-            ...nextSeason.episodes.get(nextEpisodeNum),
-            showName: show.name,
-            seasonNum: nextSeasonNum,
-            showId: show.id
-        };
-        nextEpisodes.push(nextEpisode);
+        const episode = episodes.filter(ep => ep.date <= Date.now()).find(ep => !ep.watched);
+        if (episode) nextEpisodes.push(episode);
     }
 
     res.json(nextEpisodes);
