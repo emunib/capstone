@@ -30,8 +30,10 @@
       right: rem(16px);
     }
 
-    &__img {
-      @include flex-display(row, center, center)
+    &__img > img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
     }
   }
 }

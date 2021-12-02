@@ -8,26 +8,26 @@ function MyShowsPage() {
     const [episodes, setEpisodes] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    async function getShows() {
+    async function getNextEpisodes() {
         setLoading(true);
-        const {data: shows} = await axios.get('/myshows');
-        const eps = await Promise.all(shows.map(({id}) => axios.get(`/myshows/${id}/latest`)));
+        const {data} = await axios.get(`/myshows/episodes/next`);
+        setEpisodes(data);
         setLoading(false);
-        setEpisodes(eps.map((ep, i) => ({...ep.data, showName: shows[i].name})));
+        console.log(episodes);
     }
 
     useEffect(() => {
-        getShows();
+        getNextEpisodes();
     }, []);
 
     function renderShows() {
-        console.log(episodes);
-        if (episodes.length && episodes.every(ep => ep.id)) {
-            return episodes.filter(ep => ep.id).map(ep =>
-                <Segment>
+        if (episodes.length) {
+            console.log(episodes, episodes.length);
+            return episodes.map(ep =>
+                <Segment key={ep.id}>
                     <Item.Group divided unstackable>
-                        <Episode key={ep.id} episode={ep} onClick={() => {
-                            getLatest(ep.id);
+                        <Episode episode={ep} onClick={() => {
+                            setWatched(ep.showId, ep.seasonNum, ep.episodeNum);
                         }}/>
                     </Item.Group>
                 </Segment>
@@ -44,9 +44,9 @@ function MyShowsPage() {
         }
     }
 
-    async function getLatest(id) {
-        await axios.patch(`/myshows/episodes/${id}`, {watched: true});
-        getShows();
+    async function setWatched(id, sNum, eNum) {
+        await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: true});
+        getNextEpisodes();
     }
 
 

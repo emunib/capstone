@@ -55,25 +55,93 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// update followed show, specifically for setting watched property
-router.patch('/:id', async (req, res) => {
+// update episode, specifically for setting watched property
+router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
     const id = parseInt(req.params.id);
+    const seasonNum = parseInt(req.params.sNum);
+    const episodeNum = parseInt(req.params.eNum);
     const followingShows = await readShows();
+    const data = req.body;
 
-    if (followingShows.has(id)) {
-        const data = req.body;
-
-        if (data.watched === true || data.watched === false) {
-            const show = followingShows.get(id);
-            show.watched = data.watched;
-            await writeShows(followingShows);
-            res.json(show);
+    if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
+        const seasons = followingShows.get(id).seasons;
+        if (seasons.has(seasonNum)) {
+            const episodes = seasons.get(seasonNum).episodes;
+            if (episodes.has(episodeNum)) {
+                setEpisodeWatched(followingShows.get(id), seasonNum, episodeNum, data.watched);
+                await writeShows(followingShows);
+                res.json(episodes.get(episodeNum));
+            } else {
+                res.status(404).json({message: 'No episode with that number was found'});
+            }
         } else {
-            res.status(404).json({message: 'No show with that id was found'});
+            res.status(404).json({message: 'No season with that number was found'});
         }
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }
+});
+
+// update season, specifically for setting watched property
+router.patch('/:id/seasons/:sNum', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const seasonNum = parseInt(req.params.sNum);
+    const followingShows = await readShows();
+    const data = req.body;
+
+    if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
+        const seasons = followingShows.get(id).seasons;
+        if (seasons.has(seasonNum)) {
+            setSeasonWatched(followingShows.get(id), seasonNum, data.watched);
+            await writeShows(followingShows);
+            res.json(seasons.get(seasonNum));
+        } else {
+            res.status(404).json({message: 'No season with that number was found'});
+        }
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
+});
+
+// update followed show, specifically for setting watched property
+router.patch('/:id', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const followingShows = await readShows();
+    const data = req.body;
+
+    if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
+        const show = followingShows.get(id);
+        setShowWatched(show, data.watched);
+        await writeShows(followingShows);
+        res.json(show);
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
+});
+
+router.get('/episodes/next', async (req, res) => {
+    const followingShows = await readShows();
+    const nextEpisodes = [];
+
+    for (let show of followingShows.values()) {
+        if (show.watched) continue;
+
+        const nextSeasonNum = Array.from(show.seasons.keys()).find(num => !show.seasons.get(num).watched);
+        if (nextSeasonNum === undefined) continue;
+
+        const nextSeason = show.seasons.get(nextSeasonNum);
+        const nextEpisodeNum = Array.from(nextSeason.episodes.keys()).find(num => !nextSeason.episodes.get(num).watched);
+
+        const nextEpisode = {
+            ...nextSeason.episodes.get(nextEpisodeNum),
+            showName: show.name,
+            seasonNum: nextSeasonNum,
+            showId: show.id
+        };
+        nextEpisodes.push(nextEpisode);
+    }
+
+    res.json(nextEpisodes);
 });
 
 async function createShow(id) {
@@ -117,8 +185,9 @@ async function getEpisodes(id, num, img) {
     const {data} = await axios.get(`${baseURL}${id}/season/${num}?${qs.encode(queryParams)}`);
 
     return new Map(data.episodes.map(ep => [ep.episode_number, {
+        id: ep.id,
         episodeNum: ep.episode_number,
-        date: new Date(ep.air_date.replace(/-/g, '\/')),
+        date: Date.parse(ep.air_date.replace(/-/g, '\/')),
         name: ep.name,
         overview: ep.overview,
         watched: false,
@@ -126,73 +195,25 @@ async function getEpisodes(id, num, img) {
     }]));
 }
 
-router.get('/episodes/next', async (req, res) => {
-    const followingShows = await readShows();
-    const nextEpisodes = [];
-
-    for (let show of followingShows.values()) {
-        if (show.watched) continue;
-
-        const nextSeasonNum = Array.from(show.seasons.keys()).find(num => !show.seasons.get(num).watched);
-        if (nextSeasonNum === undefined) continue;
-
-        const nextSeason = show.seasons.get(nextSeasonNum);
-        const nextEpisodeNum = Array.from(nextSeason.episodes.keys()).find(num => !nextSeason.episodes.get(num).watched);
-
-        const nextEpisode = {
-            ...nextSeason.episodes.get(nextEpisodeNum),
-            showName: show.name,
-            seasonNum: nextSeasonNum,
-            showId: show.id
-        };
-        nextEpisodes.push(nextEpisode);
-    }
-    res.json(nextEpisodes);
-});
-
 function setEpisodeWatched(show, seasonNum, episodeNum, watched) {
+    const episodes = show.seasons.get(seasonNum).episodes;
+    episodes.get(episodeNum).watched = watched;
+    show.seasons.get(seasonNum).watched = Array.from(episodes.keys()).every(num => episodes.get(num).watched);
+    show.watched = Array.from(show.seasons.keys()).every(num => show.seasons.get(num).watched);
 
 }
 
 function setSeasonWatched(show, seasonNum, watched) {
-
+    for (let num of show.seasons.get(seasonNum).episodes.keys()) {
+        setEpisodeWatched(show, seasonNum, num, watched);
+    }
+    show.watched = Array.from(show.seasons.keys()).every(num => show.seasons.get(num).watched);
 }
 
 function setShowWatched(show, watched) {
-
+    for (let num of show.seasons.keys()) {
+        setSeasonWatched(show, num, watched);
+    }
 }
-
-// router.get('/:id/latest', async (req, res) => {
-//     const shows = await readShows();
-//     const show = shows.find(show => show.id == req.params.id);
-//
-//     if (show) {
-//         const unwatched = show.seasons.filter(season => !season.watched);
-//
-//         if (unwatched.length > 0) {
-//             // get all episodes in single array
-//             const unwatchedAired = unwatched.flatMap(season => season.episodes)
-//                 // get all unwatched episodes
-//                 .filter(episode => !episode.watched)
-//                 // get all aired episodes
-//                 .filter(episode => new Date(episode.date.replace(/-/g, '\/')) < Date.now());
-//
-//             if (unwatchedAired.length) {
-//                 // get oldest episode
-//                 const latest = unwatchedAired.reduce((prev, curr) =>
-//                     new Date(prev.date.replace(/-/g, '\/')) <= new Date(curr.date.replace(/-/g, '\/')) ? prev : curr);
-//
-//                 res.json(latest);
-//             } else {
-//                 res.json({}); // TODO: CODE 203?
-//             }
-//         } else {
-//             res.json({}); // TODO: CODE 203?
-//         }
-//     } else {
-//         res.status(404).json({message: 'invalid show id'});
-//     }
-// });
-
 
 module.exports = router;
