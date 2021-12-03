@@ -10,9 +10,10 @@ import {
 } from 'react-router-dom';
 import {Container} from 'semantic-ui-react';
 import NavBar from './components/NavBar';
+import MyShowsPage from './pages/MyShowsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import SearchPage from './pages/DiscoverPage';
-import MyShowsPage from './pages/MyShowsPage';
+import UpNextPage from './pages/UpNextPage';
 
 function App() {
     return (
@@ -25,6 +26,9 @@ function App() {
                         </Route>
                         <Route exact path="/discover">
                             <SearchPage/>
+                        </Route>
+                        <Route path="/next">
+                            <UpNextPage/>
                         </Route>
                         <Route path="/shows">
                             <MyShowsPage/>

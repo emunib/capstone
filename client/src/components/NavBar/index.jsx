@@ -9,7 +9,8 @@ function NavBar() {
             <Container>
                 <Menu secondary inverted as="nav">
                     <Menu.Item color="blue" as={NavLink} to="/discover">Discover</Menu.Item>
-                    <Menu.Item color="blue" as={NavLink} to="/shows">Shows</Menu.Item>
+                    <Menu.Item color="blue" as={NavLink} to="/shows">My Shows</Menu.Item>
+                    <Menu.Item color="blue" as={NavLink} to="/next">Up Next</Menu.Item>
 
                     <Menu.Menu position="right">
                         <Menu.Item fitted={true}>

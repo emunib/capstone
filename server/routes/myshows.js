@@ -150,6 +150,7 @@ async function createShow(id) {
         name: data.name,
         overview: data.overview,
         watched: false,
+        following: true,
         numSeasons: data.number_of_seasons,
         numEpisodes: data.number_of_episodes,
         img: data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : '/images/placeholder.png'

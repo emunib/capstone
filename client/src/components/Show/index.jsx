@@ -4,25 +4,14 @@ import './style.scss';
 import {Button, Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
-function Show({show}) {
-    const [following, setFollowing] = useState(show.following);
+function Show({show, onClick}) {
     const [hovering, setHovering] = useState(false);
-
-    async function onClick() {
-        if (following) {
-            await axios.delete(`/myshows/${show.id}`);
-
-        } else {
-            await axios.post('/myshows', {id: show.id});
-        }
-        setFollowing(!following);
-    }
 
     const toggleHover = () => setHovering(!hovering);
 
     const cardColor = () => {
         if (hovering) return 'blue';
-        if (following) return 'yellow';
+        if (show.following) return 'yellow';
         return 'white';
     };
 
@@ -38,7 +27,7 @@ function Show({show}) {
                 <LoadingButton className="show-card__btn"
                                icon="plus"
                                onClick={onClick}
-                               active={following}
+                               active={show.following}
                 />
             </Card.Content>
         </Card>
