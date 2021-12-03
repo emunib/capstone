@@ -13,34 +13,38 @@ import NavBar from './components/NavBar';
 import MyShowsPage from './pages/MyShowsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import SearchPage from './pages/DiscoverPage';
+import ShowDetailsPage from './pages/ShowDetailsPage';
 import UpNextPage from './pages/UpNextPage';
 
 function App() {
     return (
         <Router>
-                <NavBar/>
-                <Container as="main" className="main">
-                    <Switch>
-                        <Route exact path="/">
-                            <Redirect to="/discover"/>
-                        </Route>
-                        <Route exact path="/discover">
-                            <SearchPage/>
-                        </Route>
-                        <Route path="/next">
-                            <UpNextPage/>
-                        </Route>
-                        <Route path="/shows">
-                            <MyShowsPage/>
-                        </Route>
-                        <Route exact path="/404">
-                            <NotFoundPage/>
-                        </Route>
-                        <Route>
-                            <Redirect to="/404"/>
-                        </Route>
-                    </Switch>
-                </Container>
+            <NavBar/>
+            <Container as="main" className="main">
+                <Switch>
+                    <Route exact path="/">
+                        <Redirect to="/discover"/>
+                    </Route>
+                    <Route exact path="/discover">
+                        <SearchPage/>
+                    </Route>
+                    <Route exact path="/next">
+                        <UpNextPage/>
+                    </Route>
+                    <Route exact path="/shows">
+                        <MyShowsPage/>
+                    </Route>
+                    <Route exact path="/shows/:id">
+                        <ShowDetailsPage/>
+                    </Route>
+                    <Route exact path="/404">
+                        <NotFoundPage/>
+                    </Route>
+                    <Route>
+                        <Redirect to="/404"/>
+                    </Route>
+                </Switch>
+            </Container>
             {/*<Segment as="footer" inverted basic> footer </Segment>*/}
         </Router>
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
+import {Link} from 'react-router-dom';
 import {Button, Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
@@ -16,7 +17,9 @@ function Show({show, onClick}) {
     };
 
     return (
-        <Card className="show-card"
+        <Card as={Link}
+              to={`/shows/${show.id}`}
+              className="show-card"
               raised
               color={cardColor()}
               onMouseEnter={toggleHover}

@@ -11,7 +11,7 @@ const queryParams = {
 // get all followed shows
 router.get('/', async (req, res) => {
     const followingShows = await readShows();
-    res.json(Array.from(followingShows.values()));
+    res.json(Array.from(followingShows.values()).map(({seasons, ...rest}) => rest));
 });
 
 // get a followed show
@@ -19,7 +19,8 @@ router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     const followingShows = await readShows();
     if (followingShows.has(id)) {
-        res.json(followingShows.get(id));
+        const {seasons, ...rest} = followingShows.get(id);
+        res.json(rest);
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }
@@ -94,7 +95,8 @@ router.patch('/:id/seasons/:sNum', async (req, res) => {
         if (seasons.has(seasonNum)) {
             setSeasonWatched(followingShows.get(id), seasonNum, data.watched);
             await writeShows(followingShows);
-            res.json(seasons.get(seasonNum));
+            const {episodes, ...rest} = seasons.get(seasonNum);
+            res.json(rest);
         } else {
             res.status(404).json({message: 'No season with that number was found'});
         }
@@ -110,10 +112,10 @@ router.patch('/:id', async (req, res) => {
     const data = req.body;
 
     if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
-        const show = followingShows.get(id);
-        setShowWatched(show, data.watched);
+        setShowWatched(followingShows.get(id), data.watched);
         await writeShows(followingShows);
-        res.json(show);
+        const {seasons, ...rest} = followingShows.get(id);
+        res.json(rest);
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }
@@ -141,6 +143,35 @@ router.get('/episodes/next', async (req, res) => {
     }
 
     res.json(nextEpisodes);
+});
+
+// get seasons for show
+router.get('/:id/seasons', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const followingShows = await readShows();
+    if (followingShows.has(id)) {
+        res.json(Array.from(followingShows.get(id).seasons.values()).map(({episodes, ...rest}) => rest));
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
+});
+
+// get episodes for season
+router.get('/:id/seasons/:num/episodes', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const num = parseInt(req.params.num);
+
+    const followingShows = await readShows();
+    if (followingShows.has(id)) {
+        const seasons = followingShows.get(id).seasons;
+        if (seasons.has(num)) {
+            res.json(Array.from(seasons.get(num).episodes.values()));
+        } else {
+            res.status(404).json({message: 'No season with that number was found'});
+        }
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
 });
 
 async function createShow(id) {
