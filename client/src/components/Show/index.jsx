@@ -2,10 +2,10 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
 import {Link} from 'react-router-dom';
-import {Button, Card, Image} from 'semantic-ui-react';
+import {Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
-function Show({show: showProp, clickHandler}) {
+function Show({show: showProp}) {
     const [hovering, setHovering] = useState(false);
     const [show, setShow] = useState(showProp);
 
@@ -30,15 +30,16 @@ function Show({show: showProp, clickHandler}) {
             <Card.Content>
                 <Card.Header>{show.name}</Card.Header>
                 <LoadingButton className="show-card__btn"
-                               icon="plus" clickHandler={async (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    if (show.following) { // i love you
-                        setShow((await axios.delete(`/myshows/${show.id}`)).data);
-                    } else {
-                        setShow((await axios.post('/myshows', {id: show.id})).data);
-                    }
-                }}
+                               icon="plus" clickHandler={
+                    async (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if (show.following) { // i love you
+                            setShow((await axios.delete(`/myshows/${show.id}`)).data);
+                        } else {
+                            setShow((await axios.post('/myshows', {id: show.id})).data);
+                        }
+                    }}
                                active={show.following}
                 />
             </Card.Content>

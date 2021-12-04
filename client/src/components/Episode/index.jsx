@@ -3,7 +3,7 @@ import './style.scss';
 import {Item} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
-function Episode({episode, onClick, withBtn}) {
+function Episode({episode, clickHandler, withBtn}) {
     return (
         <Item className="episode">
             <Item.Image className="episode__img" src={episode.img}/>
@@ -16,7 +16,7 @@ function Episode({episode, onClick, withBtn}) {
                 <Item.Description>
                     <p>{episode.overview}</p>
                 </Item.Description>
-                {withBtn && <LoadingButton className="episode__btn" icon="check" onClick={onClick}/>}
+                {withBtn && <LoadingButton active={episode.watched} className="episode__btn" icon="check" clickHandler={clickHandler}/>}
             </Item.Content>
         </Item>
     );

@@ -8,6 +8,7 @@ import Episode from '../../components/Episode';
 function ShowDetailsPage() {
     const {id} = useParams();
     const [show, setShow] = useState();
+    const [episodes, setEpisodes] = useState([]);
     const [season, setSeason] = useState();
 
     useEffect(() => {
@@ -19,11 +20,21 @@ function ShowDetailsPage() {
         setShow(data);
         if (data.seasons.length) {
             setSeason(data.seasons[0].seasonNum);
+            setEpisodes(data.seasons[0].episodes);
         }
     }
 
     function changeSeason(num) {
         setSeason(num);
+        setEpisodes(show.seasons.find(s => s.seasonNum === num).episodes);
+    }
+
+    async function setWatched(id, sNum, eNum) {
+        const {data} = await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: true});
+        const eps = [...episodes];
+        const i = eps.findIndex(ep => ep.id === data.id);
+        eps[i] = data;
+        setEpisodes(eps);
     }
 
     function renderShow() {
@@ -47,8 +58,11 @@ function ShowDetailsPage() {
                         {...(options.length ? {defaultValue: options[0].value} : {})}
                     />
                     <Item.Group divided unstackable>
-                        {show.seasons.find(s => s.seasonNum === season).episodes.map(ep => (
-                            <Episode key={ep.id} episode={{...ep, seasonNum: season, showName: show.name}} withBtn={show.following}/>
+                        {episodes.map(ep => (
+                            <Episode key={ep.id} episode={{...ep, seasonNum: season, showName: show.name}}
+                                     withBtn={show.following} clickHandler={async () => {
+                                await setWatched(show.id, season, ep.episodeNum);
+                            }}/>
                         ))}
                     </Item.Group>
                 </div>

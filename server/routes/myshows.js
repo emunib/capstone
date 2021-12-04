@@ -73,6 +73,7 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
             if (episodes.has(episodeNum)) {
                 setEpisodeWatched(followingShows.get(id), seasonNum, episodeNum, data.watched);
                 await writeShows(followingShows);
+                console.log(episodes.get(episodeNum));
                 res.json(episodes.get(episodeNum));
             } else {
                 res.status(404).json({message: 'No episode with that number was found'});
@@ -224,7 +225,9 @@ async function getEpisodes(id, num, img) {
         name: ep.name,
         overview: ep.overview,
         watched: false,
-        img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img
+        img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img,
+        seasonNum: num,
+        showId: id
     }]));
 }
 
