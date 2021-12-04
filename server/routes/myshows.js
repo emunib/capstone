@@ -35,7 +35,8 @@ router.post('/', async (req, res) => {
         const show = await createShow(id);
         followingShows.set(id, show);
         await writeShows(followingShows);
-        res.json(show);
+        const {seasons, ...rest} = show;
+        res.json(rest);
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }
@@ -47,10 +48,11 @@ router.delete('/:id', async (req, res) => {
     const followingShows = await readShows();
 
     if (followingShows.has(id)) {
-        const show = followingShows.get(id);
+        const {seasons, ...rest} = followingShows.get(id);
         followingShows.delete(id);
         await writeShows(followingShows);
-        res.json(show);
+        rest.following = false;
+        res.json(rest);
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }

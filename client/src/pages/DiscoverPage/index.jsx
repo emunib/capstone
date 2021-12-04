@@ -84,13 +84,7 @@ function SearchPage() {
             <div className="discover__results">
                 <Divider horizontal className="discover__results-title">Results</Divider>
                 <Card.Group itemsPerRow={5} stackable={true} doubling={true}>
-                    {shows.map(show => <Show key={show.id} show={show} onClick={async () => {
-                        if (show.following) {
-                            await axios.delete(`/myshows/${show.id}`);
-                        } else {
-                            await axios.post('/myshows', {id: show.id});
-                        }
-                    }}/>)}
+                    {shows.map(show => <Show key={show.id} show={show}/>)}
                 </Card.Group>
             </div>
         );

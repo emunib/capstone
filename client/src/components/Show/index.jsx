@@ -5,8 +5,9 @@ import {Link} from 'react-router-dom';
 import {Button, Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
-function Show({show, onClick}) {
+function Show({show: showProp, clickHandler}) {
     const [hovering, setHovering] = useState(false);
+    const [show, setShow] = useState(showProp);
 
     const toggleHover = () => setHovering(!hovering);
 
@@ -23,13 +24,21 @@ function Show({show, onClick}) {
               raised
               color={cardColor()}
               onMouseEnter={toggleHover}
-              onMouseLeave={toggleHover}>
+              onMouseLeave={toggleHover}
+        >
             <Image className="show-card__img" src={show.img}/>
             <Card.Content>
                 <Card.Header>{show.name}</Card.Header>
                 <LoadingButton className="show-card__btn"
-                               icon="plus"
-                               onClick={onClick}
+                               icon="plus" clickHandler={async (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (show.following) { // i love you
+                        setShow((await axios.delete(`/myshows/${show.id}`)).data);
+                    } else {
+                        setShow((await axios.post('/myshows', {id: show.id})).data);
+                    }
+                }}
                                active={show.following}
                 />
             </Card.Content>

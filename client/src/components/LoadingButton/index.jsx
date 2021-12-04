@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 import './style.scss';
 import {Button, Ref} from 'semantic-ui-react';
 
-function LoadingButton({onClick, active: activeProp, ...props}) {
+function LoadingButton({clickHandler, active: activeProp, ...props}) {
     const [loading, setLoading] = useState(false);
     const [activeState, setActiveState] = useState(activeProp);
     const buttonRef = useRef();
@@ -12,11 +12,11 @@ function LoadingButton({onClick, active: activeProp, ...props}) {
             <Button {...props}
                     loading={loading}
                     {...(activeState ? {color: 'yellow'} : {})}
-                    {...(onClick ? {
+                    {...(clickHandler ? {
                         onClick: async e => {
                             if (!loading) {
                                 setLoading(true);
-                                await onClick(e);
+                                await clickHandler(e);
                                 setLoading(false);
                                 setActiveState(!activeState);
                                 buttonRef.current.blur();
