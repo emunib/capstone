@@ -16,7 +16,7 @@ const query = {
 
 router.get('/trending', async (req, res) => {
     const [myShows, {data}] = await Promise.all([
-        readShows(),
+        readShows(req.user.id),
         axios.get(`https://api.themoviedb.org/3/trending/tv/week?${qs.stringify(query)}`)
     ]);
 
@@ -40,7 +40,7 @@ router.get('/top', async (req, res) => {
 
 
     const [myShows, {data}] = await Promise.all([
-        readShows(),
+        readShows(req.user.id),
         axios.get(`https://api.themoviedb.org/3/discover/tv?${qs.stringify(topQuery)}`)
     ]);
 
@@ -56,13 +56,13 @@ router.get('/top', async (req, res) => {
 });
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const show = await createShow(id);
+    const show = await createShow(req.user, id);
     res.json(show);
 });
 
-async function createShow(id) {
+async function createShow(user, id) {
     const {data} = await axios.get(`${baseURL}${id}?${qs.encode(query)}`);
-    const followingShows = await readShows();
+    const followingShows = await readShows(user.id);
 
     const show = {
         id: data.id,
@@ -79,7 +79,7 @@ async function createShow(id) {
         id: season.id,
         name: season.name,
         overview: season.overview,
-        watched: await isSeasonWatched(show.id, season.season_number),
+        watched: await isSeasonWatched(user, show.id, season.season_number),
         seasonNum: season.season_number,
         numEpisodes: season.episode_count,
         img: season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : show.img
@@ -94,13 +94,13 @@ async function createShow(id) {
     show.seasons = seasonData;
 
     for (let season of show.seasons) { // TODO: USE PROMISE.ALL
-        season.episodes = await getEpisodes(id, season.seasonNum, season.img);
+        season.episodes = await getEpisodes(user, id, season.seasonNum, season.img);
     }
 
     return show;
 }
 
-async function getEpisodes(id, num, img) {
+async function getEpisodes(user, id, num, img) {
     const {data} = await axios.get(`${baseURL}${id}/season/${num}?${qs.encode(query)}`);
 
     return await Promise.all(data.episodes.map(async ep => ({
@@ -109,20 +109,20 @@ async function getEpisodes(id, num, img) {
         date: Date.parse(ep.air_date.replace(/-/g, '\/')),
         name: ep.name,
         overview: ep.overview,
-        watched: await isEpisodeWatched(id, num, ep.episode_number),
+        watched: await isEpisodeWatched(user, id, num, ep.episode_number),
         img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img
     })));
 }
 
-async function isSeasonWatched(id, num) {
-    const followingShows = await readShows();
+async function isSeasonWatched(user, id, num) {
+    const followingShows = await readShows(user.id);
     if (!followingShows.has(id)) return false;
     if (!followingShows.get(id).seasons.has(num)) return false;
     return followingShows.get(id).seasons.get(num).watched;
 }
 
-async function isEpisodeWatched(id, sNum, epNum) {
-    const followingShows = await readShows();
+async function isEpisodeWatched(user, id, sNum, epNum) {
+    const followingShows = await readShows(user.id);
     if (!followingShows.has(id)) return false;
     if (!followingShows.get(id).seasons.has(sNum)) return false;
     if (!followingShows.get(id).seasons.get(sNum).episodes.has(epNum)) return false;

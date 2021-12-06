@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
         };
 
         const [myShows, {data}] = await Promise.all([
-            readShows(),
+            readShows(req.user.id),
             axios.get(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`)
         ]);
 

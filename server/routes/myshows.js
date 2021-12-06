@@ -10,14 +10,14 @@ const queryParams = {
 // TODO: APPROPRIATE RESPONSES FOR ERROR, PATCH,POST,DELETE
 // get all followed shows
 router.get('/', async (req, res) => {
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     res.json(Array.from(followingShows.values()).map(({seasons, ...rest}) => rest));
 });
 
 // get a followed show
 router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     if (followingShows.has(id)) {
         const {seasons, ...rest} = followingShows.get(id);
         res.json(rest);
@@ -29,12 +29,12 @@ router.get('/:id', async (req, res) => {
 // add show to followed
 router.post('/', async (req, res) => {
     const id = parseInt(req.body.id);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
 
     if (!followingShows.has(id)) {
         const show = await createShow(id);
         followingShows.set(id, show);
-        await writeShows(followingShows);
+        await writeShows(req.user.id, followingShows);
         const {seasons, ...rest} = show;
         res.json(rest);
     } else {
@@ -45,12 +45,12 @@ router.post('/', async (req, res) => {
 // remove show from followed
 router.delete('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
 
     if (followingShows.has(id)) {
         const {seasons, ...rest} = followingShows.get(id);
         followingShows.delete(id);
-        await writeShows(followingShows);
+        await writeShows(req.user.id, followingShows);
         rest.following = false;
         res.json(rest);
     } else {
@@ -63,7 +63,7 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
     const id = parseInt(req.params.id);
     const seasonNum = parseInt(req.params.sNum);
     const episodeNum = parseInt(req.params.eNum);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     const data = req.body;
 
     if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
@@ -72,7 +72,7 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
             const episodes = seasons.get(seasonNum).episodes;
             if (episodes.has(episodeNum)) {
                 setEpisodeWatched(followingShows.get(id), seasonNum, episodeNum, data.watched);
-                await writeShows(followingShows);
+                await writeShows(req.user.id, followingShows);
                 console.log(episodes.get(episodeNum));
                 res.json(episodes.get(episodeNum));
             } else {
@@ -90,14 +90,14 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
 router.patch('/:id/seasons/:sNum', async (req, res) => {
     const id = parseInt(req.params.id);
     const seasonNum = parseInt(req.params.sNum);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     const data = req.body;
 
     if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
         const seasons = followingShows.get(id).seasons;
         if (seasons.has(seasonNum)) {
             setSeasonWatched(followingShows.get(id), seasonNum, data.watched);
-            await writeShows(followingShows);
+            await writeShows(req.user.id, followingShows);
             const {episodes, ...rest} = seasons.get(seasonNum);
             res.json(rest);
         } else {
@@ -111,12 +111,12 @@ router.patch('/:id/seasons/:sNum', async (req, res) => {
 // update followed show, specifically for setting watched property
 router.patch('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     const data = req.body;
 
     if (followingShows.has(id) && (data.watched === true || data.watched === false)) {
         setShowWatched(followingShows.get(id), data.watched);
-        await writeShows(followingShows);
+        await writeShows(req.user.id, followingShows);
         const {seasons, ...rest} = followingShows.get(id);
         res.json(rest);
     } else {
@@ -126,7 +126,7 @@ router.patch('/:id', async (req, res) => {
 
 // get up next episode for each show
 router.get('/episodes/next', async (req, res) => {
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     const nextEpisodes = [];
 
     for (let show of followingShows.values()) {
@@ -151,7 +151,7 @@ router.get('/episodes/next', async (req, res) => {
 // get seasons for show
 router.get('/:id/seasons', async (req, res) => {
     const id = parseInt(req.params.id);
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     if (followingShows.has(id)) {
         res.json(Array.from(followingShows.get(id).seasons.values()).map(({episodes, ...rest}) => rest));
     } else {
@@ -164,7 +164,7 @@ router.get('/:id/seasons/:num/episodes', async (req, res) => {
     const id = parseInt(req.params.id);
     const num = parseInt(req.params.num);
 
-    const followingShows = await readShows();
+    const followingShows = await readShows(req.user.id);
     if (followingShows.has(id)) {
         const seasons = followingShows.get(id).seasons;
         if (seasons.has(num)) {

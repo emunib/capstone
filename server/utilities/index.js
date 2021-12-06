@@ -1,7 +1,19 @@
 const fs = require('fs').promises;
 
-const readShows = async () => JSON.parse(await fs.readFile('./data/shows.json', 'utf8'), reviver);
-const writeShows = async data => fs.writeFile('./data/shows.json', JSON.stringify(data, replacer), 'utf8');
+const readShows = async (user) => {
+    const path = `./data/${user}.json`;
+    try {
+        await fs.access(path);
+    } catch (e) {
+        await writeShows(user, new Map());
+    }
+
+    return JSON.parse(await fs.readFile(path, 'utf8'), reviver);
+};
+const writeShows = async (user, data) => {
+    const path = `./data/${user}.json`;
+    return fs.writeFile(path, JSON.stringify(data, replacer), 'utf8');
+};
 
 
 // https://stackoverflow.com/questions/29085197/how-do-you-json-stringify-an-es6-map
