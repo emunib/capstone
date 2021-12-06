@@ -1,9 +1,10 @@
+import axios from 'axios';
 import React from 'react';
 import './style.scss';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useHistory} from 'react-router-dom';
 import {Button, Container, Menu, Segment} from 'semantic-ui-react';
 
-function NavBar() {
+function NavBar({authHandler}) {
     return (
         <Segment inverted basic>
             <Container>
@@ -14,7 +15,11 @@ function NavBar() {
 
                     <Menu.Menu position="right">
                         <Menu.Item fitted={true}>
-                            <Button>Sign Out</Button>
+                            <Button onClick={() => {
+                                axios.post('/user/logout').then(() => {
+                                    authHandler();
+                                });
+                            }}>Sign Out</Button>
                         </Menu.Item>
                     </Menu.Menu>
                 </Menu>

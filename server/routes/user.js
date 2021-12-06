@@ -21,7 +21,7 @@ router.post('/', (req, res) => {
                 password: password
             });
             newUser.save((err, savedUser) => {
-                if (err) return res.json(err);
+                if (err) return res.status(400).json(err);
                 res.json(savedUser);
             });
         }
