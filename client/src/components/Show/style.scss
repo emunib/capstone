@@ -1,11 +1,21 @@
 @use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/variables" as *;
 
-.show-card {
-  position: relative;
+#root {
+  .show-card {
+    position: relative;
+    max-width: rem(450px);
+    //margin-left: auto;
+    //margin-right: auto;
 
-  &__btn {
-    position: absolute !important;
-    top: rem(12px);
-    right: rem(8px);
+    &__title--hover {
+      color: $primary;
+    }
+
+    &__btn {
+      position: absolute;
+      top: rem(12px);
+      right: rem(8px);
+    }
   }
 }

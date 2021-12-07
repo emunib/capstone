@@ -23,7 +23,7 @@ function MyShowsPage() {
         if (episodes.length) {
             return episodes.map(ep =>
                 <Segment key={ep.id}>
-                    <Item.Group divided unstackable>
+                    <Item.Group divided stackable>
                         <Episode withBtn={true} episode={ep} clickHandler={async () => {
                             await setWatched(ep.showId, ep.seasonNum, ep.episodeNum);
                         }}/>

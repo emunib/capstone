@@ -14,6 +14,10 @@ router.post('/', async (req, res) => {
             include_adult: false
         };
 
+        if (req.query && req.query.page > 0) {
+            query.page = req.query.page;
+        }
+        console.log(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`);
         const [myShows, {data}] = await Promise.all([
             readShows(req.user.id),
             axios.get(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`)

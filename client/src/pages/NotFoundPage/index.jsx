@@ -1,9 +1,16 @@
 import React from 'react';
 import './style.scss';
+import {Header, Icon} from 'semantic-ui-react';
 
 function NotFoundPage() {
     return (
-        <h1>NotFoundPage</h1>
+        <Header as="h2" icon color="grey" className="not-found">
+            <Icon name="exclamation circle"/>
+            404 Not Found
+            <Header.Subheader>
+                The page you requested could not be found
+            </Header.Subheader>
+        </Header>
     );
 }
 

@@ -17,18 +17,20 @@ function MyShowsPage() {
     }
 
     return (
-        <Card.Group itemsPerRow={5} stackable={true} doubling={true}>
-            {shows.map(show => <Show key={show.id} show={show}  onClick={async e => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (show.following) {
-                    await axios.delete(`/myshows/${show.id}`);
-                } else {
-                    await axios.post('/myshows', {id: show.id});
-                }
-                loadShows();
-            }}/>)}
-        </Card.Group>
+        <div className="my-shows">
+            <Card.Group itemsPerRow={5} stackable={true} doubling={true}>
+                {shows.map(show => <Show key={show.id} show={show} onClick={async e => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (show.following) {
+                        await axios.delete(`/myshows/${show.id}`);
+                    } else {
+                        await axios.post('/myshows', {id: show.id});
+                    }
+                    loadShows();
+                }}/>)}
+            </Card.Group>
+        </div>
     );
 }
 

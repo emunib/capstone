@@ -1,1 +1,19 @@
 @use "../../styles/partials/variables" as *;
+@use "../../styles/partials/mixins" as *;
+
+#root {
+  .nav {
+    gap: rem(7px);
+
+    &__link {
+      justify-content: center;
+    }
+
+    &__btn-item {
+      padding-left: 0;
+      padding-right: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}

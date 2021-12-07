@@ -1,3 +1,4 @@
+import {useWindowWidth} from '@react-hook/window-size';
 import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
@@ -20,7 +21,7 @@ function LoginPage({authHandler}) {
     const [signUpSuccess, setSignUpSuccess] = useState(false);
     const [signUpError, setSignUpError] = useState(false);
 
-    const history = useHistory();
+    const windowWidth = useWindowWidth()
 
     async function login() {
         const isValidEmail = validateEmail(loginEmail, setLoginEmailError);
@@ -116,6 +117,7 @@ function LoginPage({authHandler}) {
                             value={loginEmail}
                             onChange={e => {
                                 setLoginEmail(e.target.value);
+                                setLoginEmailError(null);
                             }}
                         />
                         <Form.Field
@@ -130,6 +132,7 @@ function LoginPage({authHandler}) {
                             value={loginPassword}
                             onChange={e => {
                                 setLoginPassword(e.target.value);
+                                setLoginPasswordError(null);
                             }}
                         />
                         <Message
@@ -137,7 +140,7 @@ function LoginPage({authHandler}) {
                             header="Login Failed"
                             content="Please check your email and password"
                         />
-                        <Button content="Login" primary floated="right"/>
+                        <Button fluid={windowWidth < 768} content="Login" primary floated="right"/>
                     </Form>
                 </Grid.Column>
                 <Grid.Column className="login-page__divider">
@@ -157,6 +160,7 @@ function LoginPage({authHandler}) {
                             value={signUpEmail}
                             onChange={e => {
                                 setSignUpEmail(e.target.value);
+                                setSignUpEmailError(null);
                             }}
                         />
                         <Form.Field
@@ -171,6 +175,7 @@ function LoginPage({authHandler}) {
                             value={signUpPassword}
                             onChange={e => {
                                 setSignUpPassword(e.target.value);
+                                setSignUpPasswordError(null);
                             }}
                         />
                         <Form.Field
@@ -185,6 +190,7 @@ function LoginPage({authHandler}) {
                             value={signUpConfirmPassword}
                             onChange={e => {
                                 setSignUpConfirmPassword(e.target.value);
+                                setSignUpConfirmPasswordError(null);
                             }}
                         />
                         <Message
@@ -197,7 +203,7 @@ function LoginPage({authHandler}) {
                             header="Sign Up Successful"
                             content="Please login using your email and password"
                         />
-                        <Button content="Sign Up" primary floated="right"/>
+                        <Button fluid={windowWidth < 768}  content="Sign Up" primary floated="right"/>
                     </Form>
                 </Grid.Column>
             </Grid>

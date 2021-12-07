@@ -1,0 +1,7 @@
+@use "../../styles/partials/mixins" as *;
+
+#root {
+  .not-found {
+    margin-top: rem(128px);
+  }
+}

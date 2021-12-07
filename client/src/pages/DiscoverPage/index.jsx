@@ -1,16 +1,19 @@
+import {useWindowWidth} from '@react-hook/window-size';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Divider, Header, Card, Segment, Menu, Input, Loader, Icon} from 'semantic-ui-react';
+import {Divider, Header, Card, Segment, Menu, Input, Loader, Icon, Button} from 'semantic-ui-react';
 import Show from '../../components/Show';
 
 let cancelToken;
 
 function SearchPage() {
     const [shows, setShows] = useState([]);
+    const [page, setPage] = useState(1);
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [resultType, setResultType] = useState('');
+    const windowWidth = useWindowWidth();
 
     useEffect(() => {
         onResultChange('trending');
@@ -48,12 +51,17 @@ function SearchPage() {
     }
 
     async function onResultChange(type) {
+        setPage(1);
         setResultType(type);
         if (type === 'trending' || type === 'top') {
-            const {data} = await axios.get(`/shows/${type}`);
+            const {data} = await getShows(type, 1);
             setValue('');
             setShows(data);
         }
+    }
+
+    function getShows(type, page) {
+        return axios.get(`/shows/${type}?page=${page}`);
     }
 
     function renderLoader() {
@@ -86,6 +94,18 @@ function SearchPage() {
                 <Card.Group itemsPerRow={5} stackable={true} doubling={true}>
                     {shows.map(show => <Show key={show.id} show={show}/>)}
                 </Card.Group>
+                <Button fluid={windowWidth < 768} className="discover__load-btn" primary content="Load More"
+                        onClick={async e => {
+                            if (resultType === 'search') {
+                                const {data} = await axios.post(`/search?page=${page + 1}`, {query: value});
+                                setShows([...shows, ...data]);
+                            } else {
+                                const {data} = await getShows(resultType, page + 1);
+                                setShows([...shows, ...data]);
+                            }
+                            setPage(page + 1);
+                            e.target.blur();
+                        }}/>
             </div>
         );
         return renderNoResults();

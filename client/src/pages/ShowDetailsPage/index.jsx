@@ -57,10 +57,10 @@ function ShowDetailsPage() {
                         options={options}
                         {...(options.length ? {defaultValue: options[0].value} : {})}
                     />
-                    <Item.Group divided unstackable>
+                    <Item.Group divided stackable>
                         {episodes.map(ep => (
                             <Episode key={ep.id} episode={{...ep, seasonNum: season, showName: show.name}}
-                                     withBtn={show.following} clickHandler={async () => {
+                                     withBtn={show.following && ep.date <= Date.now()} clickHandler={async () => {
                                 await setWatched(show.id, season, ep.episodeNum);
                             }}/>
                         ))}

@@ -5,17 +5,20 @@ import {NavLink, useHistory} from 'react-router-dom';
 import {Button, Container, Menu, Segment} from 'semantic-ui-react';
 
 function NavBar({authHandler}) {
+    axios.get('/user').then(data => {
+        console.log(data);
+    });
     return (
         <Segment inverted basic>
             <Container>
-                <Menu secondary inverted as="nav">
-                    <Menu.Item color="blue" as={NavLink} to="/discover">Discover</Menu.Item>
-                    <Menu.Item color="blue" as={NavLink} to="/shows">My Shows</Menu.Item>
-                    <Menu.Item color="blue" as={NavLink} to="/next">Up Next</Menu.Item>
+                <Menu secondary inverted as="nav" stackable className="nav">
+                    <Menu.Item className="nav__link" color="blue" as={NavLink} to="/discover">Discover</Menu.Item>
+                    <Menu.Item className="nav__link" color="blue" as={NavLink} to="/shows">My Shows</Menu.Item>
+                    <Menu.Item className="nav__link" color="blue" as={NavLink} to="/next">Up Next</Menu.Item>
 
                     <Menu.Menu position="right">
-                        <Menu.Item fitted={true}>
-                            <Button onClick={() => {
+                        <Menu.Item className="nav__btn-item">
+                            <Button fluid className="nav__btn" onClick={() => {
                                 axios.post('/user/logout').then(() => {
                                     authHandler();
                                 });

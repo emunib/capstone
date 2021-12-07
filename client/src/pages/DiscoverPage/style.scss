@@ -10,8 +10,14 @@
       text-align: center;
     }
 
+    &__load-btn {
+      margin-top: rem(28px);
+      margin-bottom: rem(28px);
+    }
+
     &__menu {
       justify-content: center;
+      gap: rem(7px);
     }
 
     &__search-item {

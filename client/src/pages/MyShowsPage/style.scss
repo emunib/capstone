@@ -1,0 +1,17 @@
+@use "../../styles/partials/mixins" as *;
+#root {
+  .my-shows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+
+    & > * {
+      width: auto;
+      @include tablet() {
+        width: 100%;
+      }
+    }
+  }
+
+}

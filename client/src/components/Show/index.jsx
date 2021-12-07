@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
 import {Link} from 'react-router-dom';
-import {Card, Image} from 'semantic-ui-react';
+import {Card, Header, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
 function Show({show: showProp}) {
@@ -11,10 +11,10 @@ function Show({show: showProp}) {
 
     const toggleHover = () => setHovering(!hovering);
 
-    const cardColor = () => {
-        if (hovering) return 'blue';
-        if (show.following) return 'yellow';
-        return 'white';
+    const titleClass = () => {
+        if (hovering) return 'show-card__title--hover';
+        // if (show.following) return 'yellow';
+        return '';
     };
 
     return (
@@ -22,19 +22,19 @@ function Show({show: showProp}) {
               to={`/shows/${show.id}`}
               className="show-card"
               raised
-              color={cardColor()}
+            // color={cardColor()}
               onMouseEnter={toggleHover}
               onMouseLeave={toggleHover}
         >
             <Image className="show-card__img" src={show.img}/>
             <Card.Content>
-                <Card.Header>{show.name}</Card.Header>
+                <Card.Header className={titleClass()} textAlign="center">{show.name}</Card.Header>
                 <LoadingButton className="show-card__btn"
                                icon="plus" clickHandler={
                     async (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        if (show.following) { // i love you
+                        if (show.following) {
                             setShow((await axios.delete(`/myshows/${show.id}`)).data);
                         } else {
                             setShow((await axios.post('/myshows', {id: show.id})).data);

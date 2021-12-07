@@ -15,9 +15,13 @@ const query = {
 };
 
 router.get('/trending', async (req, res) => {
+    const trendingQuery = {...query};
+    if (req.query && req.query.page > 0) {
+        trendingQuery.page = req.query.page;
+    }
     const [myShows, {data}] = await Promise.all([
         readShows(req.user.id),
-        axios.get(`https://api.themoviedb.org/3/trending/tv/week?${qs.stringify(query)}`)
+        axios.get(`https://api.themoviedb.org/3/trending/tv/week?${qs.stringify(trendingQuery)}`)
     ]);
 
     const shows = data.results.map(({name, id, overview, poster_path}) => ({
@@ -38,6 +42,9 @@ router.get('/top', async (req, res) => {
         'vote_average.gte': 8
     };
 
+    if (req.query && req.query.page > 0) {
+        topQuery.page = req.query.page;
+    }
 
     const [myShows, {data}] = await Promise.all([
         readShows(req.user.id),
