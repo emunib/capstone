@@ -6,7 +6,7 @@ import LoadingButton from '../LoadingButton';
 function Episode({episode, clickHandler, withBtn}) {
     return (
         <Item className="episode">
-            <Item.Image className="episode__img" src={episode.img}/>
+            <Item.Image className="episode__img" rounded src={episode.img}/>
 
             <Item.Content>
                 <Item.Meta className="episode__date">{(new Date(episode.date)).toLocaleDateString('en-US')}</Item.Meta>

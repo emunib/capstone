@@ -70,7 +70,7 @@ function ShowDetailsPage() {
                     <Divider hidden/>
                     <Grid className="show-details" container columns="equal" stackable>
                         <GridColumn width={5}>
-                            <Image src={show.img}/>
+                            <Image rounded src={show.img}/>
                         </GridColumn>
                         <GridColumn className="show-details__content">
                             <div className="show-details__show-btns">
