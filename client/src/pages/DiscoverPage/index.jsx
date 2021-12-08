@@ -113,7 +113,8 @@ function SearchPage() {
 
     return (
         <div className="discover" id="discover">
-            <Segment as="section" className="discover__header">
+            <section className="discover__header">
+                <Divider hidden fitted/>
                 <Header as="h1" className="discover__title">Discover</Header>
                 <Menu secondary fluid stackable className="discover__menu">
                     <Menu.Item className="discover__search-item">
@@ -123,6 +124,7 @@ function SearchPage() {
                                }}/>
                     </Menu.Item>
                     <Menu.Item
+                        className="discover__item"
                         name="trending"
                         active={resultType === 'trending'}
                         onClick={(e, {name}) => {
@@ -131,6 +133,7 @@ function SearchPage() {
                         color="blue"
                     />
                     <Menu.Item
+                        className="discover__item"
                         name="top"
                         active={resultType === 'top'}
                         content="Top Rated"
@@ -140,7 +143,7 @@ function SearchPage() {
                         color="blue"
                     />
                 </Menu>
-            </Segment>
+            </section>
             {renderShows()}
         </div>
     );

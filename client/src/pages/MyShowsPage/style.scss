@@ -6,8 +6,9 @@
     align-items: center;
     flex-grow: 1;
 
-    & > * {
+    &__content {
       width: auto;
+      margin-top: rem(8px);
       @include tablet() {
         width: 100%;
       }

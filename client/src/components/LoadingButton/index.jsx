@@ -1,15 +1,20 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './style.scss';
 import {Button, Ref} from 'semantic-ui-react';
 
-function LoadingButton({clickHandler, active: activeProp, ...props}) {
+function LoadingButton(props) {
+    let {clickHandler, active: activeProp, ...rest} = props;
     const [loading, setLoading] = useState(false);
     const [activeState, setActiveState] = useState(activeProp);
     const buttonRef = useRef();
 
+    useEffect(() => {
+        setActiveState(props.active);
+    }, [props.active]);
+
     return (
         <Ref innerRef={buttonRef}>
-            <Button {...props}
+            <Button {...rest}
                     loading={loading}
                     {...(activeState ? {color: 'yellow'} : {})}
                     {...(clickHandler ? {

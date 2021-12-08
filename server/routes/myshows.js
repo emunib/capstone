@@ -99,6 +99,7 @@ router.patch('/:id/seasons/:sNum', async (req, res) => {
             setSeasonWatched(followingShows.get(id), seasonNum, data.watched);
             await writeShows(req.user.id, followingShows);
             const {episodes, ...rest} = seasons.get(seasonNum);
+            rest.episodes = Array.from(episodes.values());
             res.json(rest);
         } else {
             res.status(404).json({message: 'No season with that number was found'});
@@ -107,6 +108,7 @@ router.patch('/:id/seasons/:sNum', async (req, res) => {
         res.status(404).json({message: 'No show with that id was found'});
     }
 });
+// TODO: EMPTY MYSHOWS plaeholder
 
 // update followed show, specifically for setting watched property
 router.patch('/:id', async (req, res) => {
@@ -153,7 +155,30 @@ router.get('/:id/seasons', async (req, res) => {
     const id = parseInt(req.params.id);
     const followingShows = await readShows(req.user.id);
     if (followingShows.has(id)) {
-        res.json(Array.from(followingShows.get(id).seasons.values()).map(({episodes, ...rest}) => rest));
+        res.json(Array.from(followingShows.get(id).seasons.values()).map(({episodes, ...rest}) => ({
+            ...rest,
+            episodes: Array.from(episodes.values())
+        })));
+    } else {
+        res.status(404).json({message: 'No show with that id was found'});
+    }
+});
+
+// get season for show
+router.get('/:id/seasons/:num', async (req, res) => {
+    const id = parseInt(req.params.id);
+    const num = parseInt(req.params.num);
+
+    const followingShows = await readShows(req.user.id);
+    if (followingShows.has(id)) {
+        const seasons = followingShows.get(id).seasons;
+        if (seasons.has(num)) {
+            const season = seasons.get(num);
+            season.episodes = Array.from(season.episodes.values());
+            res.json(season);
+        } else {
+            res.status(404).json({message: 'No season with that number was found'});
+        }
     } else {
         res.status(404).json({message: 'No show with that id was found'});
     }

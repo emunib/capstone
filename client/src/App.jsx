@@ -7,9 +7,10 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect
+    Redirect, Link
 } from 'react-router-dom';
-import {Container} from 'semantic-ui-react';
+import {Container, Divider, Image} from 'semantic-ui-react';
+import Footer from './components/Footer';
 import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
 import MyShowsPage from './pages/MyShowsPage';
@@ -17,6 +18,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import SearchPage from './pages/DiscoverPage';
 import ShowDetailsPage from './pages/ShowDetailsPage';
 import UpNextPage from './pages/UpNextPage';
+import logo from './assets/logos/TMDB.svg';
 
 function App() {
     const [authed, setAuthed] = useState();
@@ -63,7 +65,7 @@ function App() {
                     </Route>
                 </Switch>
             </Container>
-            {/*<Segment as="footer" inverted basic> footer </Segment>*/}
+            {authed && <Footer/>}
         </Router>
 
     );

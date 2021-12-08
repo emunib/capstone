@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Card} from 'semantic-ui-react';
+import {Card, Divider, Header} from 'semantic-ui-react';
 import Show from '../../components/Show';
 
 function MyShowsPage() {
@@ -18,7 +18,9 @@ function MyShowsPage() {
 
     return (
         <div className="my-shows">
-            <Card.Group itemsPerRow={5} stackable={true} doubling={true}>
+            <Divider hidden fitted/>
+            <Header as="h1" textAlign="center">My Shows</Header>
+            <Card.Group itemsPerRow={5} stackable={true} doubling={true} className="my-shows__content">
                 {shows.map(show => <Show key={show.id} show={show} onClick={async e => {
                     e.stopPropagation();
                     e.preventDefault();

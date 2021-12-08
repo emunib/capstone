@@ -4,7 +4,7 @@ import {Header, Icon} from 'semantic-ui-react';
 
 function NotFoundPage() {
     return (
-        <Header as="h2" icon color="grey" className="not-found">
+        <Header as="h3" icon color="grey" className="not-found">
             <Icon name="exclamation circle"/>
             404 Not Found
             <Header.Subheader>
