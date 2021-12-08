@@ -64,6 +64,6 @@ You can go to [http://localhost:3000/](http://localhost:3000/) to use the app.
 
 ## Contact
 
-This web app was developed, designed, and created by Ehtasham Munib.
+This web app was designed and developed by Ehtasham Munib.
 
 You can follow me on [GitHub](https://github.com/emunib/) and [LinkedIn](https://www.linkedin.com/in/emunib/).
