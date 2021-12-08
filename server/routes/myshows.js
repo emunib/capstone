@@ -7,7 +7,6 @@ const baseURL = 'https://api.themoviedb.org/3/tv/';
 const queryParams = {
     api_key: API_KEY
 };
-// TODO: APPROPRIATE RESPONSES FOR ERROR, PATCH,POST,DELETE
 // get all followed shows
 router.get('/', async (req, res) => {
     const followingShows = await readShows(req.user.id);
@@ -108,7 +107,6 @@ router.patch('/:id/seasons/:sNum', async (req, res) => {
         res.status(404).json({message: 'No show with that id was found'});
     }
 });
-// TODO: EMPTY MYSHOWS plaeholder
 
 // update followed show, specifically for setting watched property
 router.patch('/:id', async (req, res) => {

@@ -23,7 +23,7 @@ function LoadingButton(props) {
                                 setLoading(true);
                                 await clickHandler(e);
                                 setLoading(false);
-                                setActiveState(!activeState); // TODO: CHANGE TO USE PATCH RESPONSE
+                                setActiveState(!activeState);
                                 buttonRef.current.blur();
                             }
                         }

@@ -1,22 +1,27 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Divider, Header, Icon, Item, Segment} from 'semantic-ui-react';
+import {Divider, Header, Icon, Item, Loader, Segment} from 'semantic-ui-react';
 import Episode from '../../components/Episode';
 
 function UpNextPage() {
     const [episodes, setEpisodes] = useState([]);
-    const [loading, setLoading] = useState(false); // TODO LOADING SPINNER
+    const [loading, setLoading] = useState(true);
 
     async function getNextEpisodes() {
-        setLoading(true);
         const {data} = await axios.get(`/myshows/episodes/next`);
         setEpisodes(data);
+    }
+
+
+    async function init() {
+        setLoading(true);
+        await getNextEpisodes();
         setLoading(false);
     }
 
     useEffect(() => {
-        getNextEpisodes();
+        init();
     }, []);
 
     function renderShows() {
@@ -52,7 +57,7 @@ function UpNextPage() {
         <>
             <Divider hidden fitted/>
             <Header as="h1" textAlign="center">Up Next</Header>
-            {renderShows()}
+            {loading ? <Loader active inline="centered" className="up-next__loader"/> : renderShows()}
         </>
     );
 }

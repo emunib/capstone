@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {useParams} from 'react-router-dom';
-import {Divider, Dropdown, Grid, GridColumn, Header, Icon, Image, Item} from 'semantic-ui-react';
+import {Divider, Dropdown, Grid, GridColumn, Header, Icon, Image, Item, Loader} from 'semantic-ui-react';
 import Episode from '../../components/Episode';
 import LoadingButton from '../../components/LoadingButton';
 
@@ -10,9 +10,10 @@ function ShowDetailsPage() {
     const {id} = useParams();
     const [show, setShow] = useState();
     const [season, setSeason] = useState();
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        loadShow();
+        init();
     }, []);
 
     async function loadShow() {
@@ -21,6 +22,12 @@ function ShowDetailsPage() {
         if (!season && data.seasons.length) {
             setSeason(data.seasons[0]);
         }
+    }
+
+    async function init() {
+        setLoading(true);
+        await loadShow();
+        setLoading(false);
     }
 
     async function changeSeason(num) {
@@ -51,6 +58,7 @@ function ShowDetailsPage() {
     async function setShowWatched() {
         await axios.patch(`/myshows/${id}`, {watched: !show.watched});
         await loadShow();
+        await changeSeason(season.seasonNum);
     }
 
     function renderShow() {
@@ -115,7 +123,7 @@ function ShowDetailsPage() {
 
     return (
         <>
-            {renderShow()}
+            {loading ? <Loader active inline="centered" className="show-details__loader"/> : renderShow()}
         </>
     );
 }

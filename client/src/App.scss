@@ -10,4 +10,8 @@
     @include flex-display(column);
     flex-grow: 1;
   }
+
+  .app__loader {
+    margin-top: rem(256px);
+  }
 }

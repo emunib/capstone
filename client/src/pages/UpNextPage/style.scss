@@ -1,0 +1,7 @@
+@use "../../styles/partials/mixins" as *;
+
+#root {
+  .up-next__loader {
+    margin-top: rem(128px);
+  }
+}
