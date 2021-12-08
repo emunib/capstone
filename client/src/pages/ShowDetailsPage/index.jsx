@@ -44,6 +44,7 @@ function ShowDetailsPage() {
     async function setSeasonWatched(id, sNum) {
         await axios.patch(`/myshows/${id}/seasons/${sNum}`, {watched: !season.watched});
         await loadShow();
+        await changeSeason(season.seasonNum);
     }
 
     async function setShowFollowing() {

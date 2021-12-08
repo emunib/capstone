@@ -1,7 +1,7 @@
 const axios = require('axios');
 const {readShows, writeShows} = require('../utilities');
 const qs = require('querystring');
-const {API_KEY} = require('../config');
+const {API_KEY} = process.env;
 const router = require('express').Router();
 const baseURL = 'https://api.themoviedb.org/3/tv/';
 const queryParams = {
@@ -72,7 +72,6 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
             if (episodes.has(episodeNum)) {
                 setEpisodeWatched(followingShows.get(id), seasonNum, episodeNum, data.watched);
                 await writeShows(req.user.id, followingShows);
-                console.log(episodes.get(episodeNum));
                 res.json(episodes.get(episodeNum));
             } else {
                 res.status(404).json({message: 'No episode with that number was found'});
@@ -257,7 +256,7 @@ async function getEpisodes(id, num, img) {
 function setEpisodeWatched(show, seasonNum, episodeNum, watched) {
     const episodes = show.seasons.get(seasonNum).episodes;
     episodes.get(episodeNum).watched = watched;
-    show.seasons.get(seasonNum).watched = Array.from(episodes.keys()).every(num => episodes.get(num).watched);
+    show.seasons.get(seasonNum).watched = Array.from(episodes.keys()).every(num => episodes.get(num).watched || episodes.get(num).date > Date.now());
     show.watched = Array.from(show.seasons.keys()).every(num => show.seasons.get(num).watched);
 
 }
