@@ -24,7 +24,9 @@ function LoadingButton(props) {
                                 await clickHandler(e);
                                 setLoading(false);
                                 setActiveState(!activeState);
-                                buttonRef.current.blur();
+                                if (buttonRef.current) {
+                                    buttonRef.current.blur();
+                                }
                             }
                         }
                     } : {})}
