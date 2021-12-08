@@ -2,7 +2,6 @@ import {useWindowWidth} from '@react-hook/window-size';
 import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
-import {useHistory} from 'react-router-dom';
 import {Button, Divider, Form, Grid, Header, Input, Message, Segment} from 'semantic-ui-react';
 
 function LoginPage({authHandler}) {

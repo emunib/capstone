@@ -85,8 +85,9 @@ function ShowDetailsPage() {
                             </div>
                             <Header as="h1" content={show.name} textAlign="center"/>
                             <p>{show.overview}</p>
+                            <Divider hidden/>
                             <div className="show-details__season-header">
-                                <Header as="h3" content={season.name} className="show-details__season-title"/>
+                                <Header as="h2" content={season.name} className="show-details__season-title"/>
                                 <Dropdown
                                     onChange={(e, {value}) => {
                                         changeSeason(value);

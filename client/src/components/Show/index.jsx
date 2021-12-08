@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
 import {Link} from 'react-router-dom';
-import {Card, Header, Image} from 'semantic-ui-react';
+import {Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
 function Show({show: showProp}) {
@@ -13,7 +13,6 @@ function Show({show: showProp}) {
 
     const titleClass = () => {
         if (hovering) return 'show-card__title--hover';
-        // if (show.following) return 'yellow';
         return '';
     };
 
@@ -22,7 +21,6 @@ function Show({show: showProp}) {
               to={`/shows/${show.id}`}
               className="show-card"
               raised
-            // color={cardColor()}
               onMouseEnter={toggleHover}
               onMouseLeave={toggleHover}
         >

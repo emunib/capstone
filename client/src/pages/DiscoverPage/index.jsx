@@ -2,7 +2,7 @@ import {useWindowWidth} from '@react-hook/window-size';
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
-import {Divider, Header, Card, Segment, Menu, Input, Loader, Icon, Button} from 'semantic-ui-react';
+import {Divider, Header, Card, Menu, Input, Loader, Icon, Button} from 'semantic-ui-react';
 import Show from '../../components/Show';
 
 let cancelToken;

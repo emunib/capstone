@@ -7,9 +7,9 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect, Link
+    Redirect
 } from 'react-router-dom';
-import {Container, Divider, Image, Loader} from 'semantic-ui-react';
+import {Container, Loader} from 'semantic-ui-react';
 import Footer from './components/Footer';
 import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
