@@ -27,10 +27,18 @@ app.use(express.urlencoded({
 app.use(express.json());
 app.use(express.static('public'));
 
+app.use('/user', require('./routes/user'));
+app.use(function (req, res, next) {
+    if (req.user) {
+        next();
+    } else {
+        next()
+        res.status(401).json({error: 'Unauthorized'});
+    }
+});
 app.use('/search', require('./routes/search'));
 app.use('/shows', require('./routes/shows'));
 app.use('/myshows', require('./routes/myshows'));
-app.use('/user', require('./routes/user'));
 
 app.listen(PORT, () => {
     console.log(`Server started on http://localhost:${PORT}`);

@@ -2,7 +2,8 @@ const axios = require('axios');
 const router = require('express').Router();
 const querystring = require('querystring');
 const {API_KEY} = process.env;
-const {readShows} = require('../utilities');
+const {formatBasicShow} = require('../utils');
+const Show = require('../database/models/show');
 
 router.post('/', async (req, res) => {
     if (req.body.query) {
@@ -17,20 +18,13 @@ router.post('/', async (req, res) => {
         if (req.query && req.query.page > 0) {
             query.page = req.query.page;
         }
-        console.log(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`);
-        const [myShows, {data}] = await Promise.all([
-            readShows(req.user.id),
-            axios.get(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`)
-        ]);
 
-        const shows = data.results.map(({name, id, poster_path}) => ({
-            name,
-            id,
-            following: myShows.has(id),
-            img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : '/images/placeholder.png'
-        }));
+        const {data: {results}} = await axios.get(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(query)}`);
+        const followed = await Promise.all(results.map(show => Show.exists({show_id: show.id})));
 
-        res.json(shows);
+        const formatted = results.map((show, i) => formatBasicShow(show, followed[i]));
+
+        res.json(formatted);
     } else {
         res.json([]);
     }

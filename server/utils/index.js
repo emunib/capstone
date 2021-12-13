@@ -38,4 +38,19 @@ function reviver(key, value) {
     return value;
 }
 
-module.exports = {readShows, writeShows};
+const formatBasicShow = (show, followed) => {
+    const {id, name, poster_path, vote_average} = show;
+    return {
+        id,
+        name,
+        followed,
+        img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}`
+            : '/images/placeholder.png',
+        rating: vote_average
+    };
+};
+
+const formatDetailedShow = show => {
+};
+
+module.exports = {readShows, writeShows, formatBasicShow, formatDetailedShow};

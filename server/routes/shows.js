@@ -2,7 +2,7 @@ const axios = require('axios');
 const router = require('express').Router();
 const qs = require('querystring');
 const {API_KEY} = process.env;
-const {readShows} = require('../utilities');
+const {readShows} = require('../utils');
 const baseURL = 'https://api.themoviedb.org/3/tv/';
 
 const query = {
