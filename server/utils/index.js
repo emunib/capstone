@@ -42,10 +42,11 @@ function reviver(key, value) {
 }
 
 const formatBasicShow = (show, following) => {
-    const {id, name, poster_path, vote_average} = show;
+    const {id, name, overview, poster_path, vote_average} = show;
     return {
         id,
         name,
+        overview,
         following,
         img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}`
             : '/images/placeholder.png',

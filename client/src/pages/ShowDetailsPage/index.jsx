@@ -99,13 +99,13 @@ function ShowDetailsPage() {
                     options={options}
                     defaultValue={options[0].value}
                 />
-                {/*{show.following && <LoadingButton active={season.watched} icon labelPosition="right"*/}
-                {/*                                  clickHandler={async () => {*/}
-                {/*                                      await setSeasonWatched(show.id, season.seasonNum);*/}
-                {/*                                  }}>*/}
-                {/*    <Icon name="checkmark"/>*/}
-                {/*    Season*/}
-                {/*</LoadingButton>}*/}
+                {show.following && <LoadingButton active={season.watched} icon labelPosition="right"
+                                                  clickHandler={async () => {
+                                                      await setSeasonWatched(show.id, season.seasonNum);
+                                                  }}>
+                    <Icon name="checkmark"/>
+                    Season
+                </LoadingButton>}
             </div>
         );
     }
@@ -138,16 +138,16 @@ function ShowDetailsPage() {
                         <Image rounded src={show.img}/>
                     </GridColumn>
                     <GridColumn className="show-details__content">
-                        {/*<div className="show-details__show-btns">*/}
-                        {/*    <LoadingButton active={show.following} icon="plus" clickHandler={setShowFollowing}/>*/}
-                        {/*    {show.following && <LoadingButton active={show.watched} icon labelPosition="right"*/}
-                        {/*                                      clickHandler={async () => {*/}
-                        {/*                                          await setShowWatched();*/}
-                        {/*                                      }}>*/}
-                        {/*        <Icon name="checkmark"/>*/}
-                        {/*        Show*/}
-                        {/*    </LoadingButton>}*/}
-                        {/*</div>*/}
+                        <div className="show-details__show-btns">
+                            <LoadingButton active={show.following} icon="plus" clickHandler={setShowFollowing}/>
+                            {show.following && <LoadingButton active={show.watched} icon labelPosition="right"
+                                                              clickHandler={async () => {
+                                                                  await setShowWatched();
+                                                              }}>
+                                <Icon name="checkmark"/>
+                                Show
+                            </LoadingButton>}
+                        </div>
                         <Header as="h1" content={show.name} textAlign="center"/>
                         <p>{show.overview}</p>
                         <Divider hidden/>

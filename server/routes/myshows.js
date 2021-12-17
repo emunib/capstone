@@ -27,37 +27,6 @@ const Show = require('../database/models/show');
 //     }
 // });
 //
-// // add show to followed
-// router.post('/', async (req, res) => {
-//     const id = parseInt(req.body.id);
-//     const followingShows = await readShows(req.user.id);
-//
-//     if (!followingShows.has(id)) {
-//         const show = await createShow(id);
-//         followingShows.set(id, show);
-//         await writeShows(req.user.id, followingShows);
-//         const {seasons, ...rest} = show;
-//         res.json(rest);
-//     } else {
-//         res.status(404).json({message: 'No show with that id was found'});
-//     }
-// });
-//
-// // remove show from followed
-// router.delete('/:id', async (req, res) => {
-//     const id = parseInt(req.params.id);
-//     const followingShows = await readShows(req.user.id);
-//
-//     if (followingShows.has(id)) {
-//         const {seasons, ...rest} = followingShows.get(id);
-//         followingShows.delete(id);
-//         await writeShows(req.user.id, followingShows);
-//         rest.following = false;
-//         res.json(rest);
-//     } else {
-//         res.status(404).json({message: 'No show with that id was found'});
-//     }
-// });
 //
 // // update episode, specifically for setting watched property
 // router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
@@ -303,7 +272,7 @@ router.delete('/:id', async (req, res) => {
         res.json({following: false});
     } catch (e) {
         console.log(e);
-        res.json({following: true});
+        res.json({following: true}); // TODO: error responses for all requests
     }
 });
 
