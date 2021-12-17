@@ -1,3 +1,6 @@
+const axios = require('axios');
+const querystring = require('querystring');
+const Show = require('../database/models/show');
 const fs = require('fs').promises;
 
 const readShows = async (user) => {
@@ -38,12 +41,12 @@ function reviver(key, value) {
     return value;
 }
 
-const formatBasicShow = (show, followed) => {
+const formatBasicShow = (show, following) => {
     const {id, name, poster_path, vote_average} = show;
     return {
         id,
         name,
-        followed,
+        following,
         img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}`
             : '/images/placeholder.png',
         rating: vote_average
@@ -53,4 +56,10 @@ const formatBasicShow = (show, followed) => {
 const formatDetailedShow = show => {
 };
 
-module.exports = {readShows, writeShows, formatBasicShow, formatDetailedShow};
+async function getFormattedShows(url, userId) {
+    const {data: {results}} = await axios.get(url);
+    const followed = await Promise.all(results.map(show => Show.exists({user_id: userId, show_id: show.id})));
+    return results.map((show, i) => formatBasicShow(show, followed[i]));
+}
+
+module.exports = {readShows, writeShows, formatBasicShow, formatDetailedShow, getFormattedShows};

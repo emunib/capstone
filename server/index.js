@@ -33,10 +33,10 @@ app.use(function (req, res, next) {
         next();
     } else {
         next()
-        res.status(401).json({error: 'Unauthorized'});
+        // res.status(401).json({error: 'Unauthorized'});
     }
 });
-app.use('/search', require('./routes/search'));
+
 app.use('/shows', require('./routes/shows'));
 app.use('/myshows', require('./routes/myshows'));
 

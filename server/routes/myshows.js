@@ -277,26 +277,34 @@ const Show = require('../database/models/show');
 // }
 
 
-
 // router.get('/', async (req, res) => {
 //     const shows = await getAllShows();
 //     res.json(shows);
 // });
 router.post('/', async (req, res) => {
-    let show = req.body;
-
     const userId = req.user.id;
-    const showId = parseInt(show.id);
+    const showId = parseInt(req.body.id);
 
     try {
-        await (new Show({user_id: userId, show_id: show.id})).save();
-        show.following = true;
+        await (new Show({user_id: userId, show_id: showId})).save();
+        res.json({following: true});
     } catch (e) {
         console.log(e);
-        show.following = false;
+        res.json({following: e.code === 11000});
     }
+});
 
-    res.json(show);
+router.delete('/:id', async (req, res) => {
+    const userId = req.user.id;
+    const showId = parseInt(req.params.id);
+
+    try {
+        await Show.deleteOne({user_id: userId, show_id: showId});
+        res.json({following: false});
+    } catch (e) {
+        console.log(e);
+        res.json({following: true});
+    }
 });
 
 // // get a show

@@ -2,8 +2,9 @@ const axios = require('axios');
 const router = require('express').Router();
 const qs = require('querystring');
 const {API_KEY} = process.env;
-const {readShows} = require('../utils');
-const baseURL = 'https://api.themoviedb.org/3/tv/';
+const {readShows, formatBasicShow, getFormattedShows} = require('../utils');
+const Show = require('../database/models/show');
+const querystring = require('querystring');
 
 const query = {
     api_key: API_KEY,
@@ -14,25 +15,28 @@ const query = {
     include_null_first_air_dates: false
 };
 
+router.post('/search', async (req, res) => {
+    if (req.body.query) {
+        const searchQuery = {...query, query: req.body.query};
+
+        if (req.query && req.query.page > 0) {
+            searchQuery.page = req.query.page;
+        }
+
+        res.json(await getFormattedShows(`https://api.themoviedb.org/3/search/tv?${querystring.stringify(searchQuery)}`, req.user.id));
+    } else {
+        res.json([]);
+    }
+});
+
 router.get('/trending', async (req, res) => {
     const trendingQuery = {...query};
+
     if (req.query && req.query.page > 0) {
         trendingQuery.page = req.query.page;
     }
-    const [myShows, {data}] = await Promise.all([
-        readShows(req.user.id),
-        axios.get(`https://api.themoviedb.org/3/trending/tv/week?${qs.stringify(trendingQuery)}`)
-    ]);
 
-    const shows = data.results.map(({name, id, overview, poster_path}) => ({
-        name,
-        id,
-        overview,
-        following: myShows.has(id),
-        img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : '/images/placeholder.png'
-    }));
-
-    res.json(shows);
+    res.json(await getFormattedShows(`https://api.themoviedb.org/3/trending/tv/week?${qs.encode(trendingQuery)}`, req.user.id));
 });
 
 router.get('/top', async (req, res) => {
@@ -46,94 +50,55 @@ router.get('/top', async (req, res) => {
         topQuery.page = req.query.page;
     }
 
-    const [myShows, {data}] = await Promise.all([
-        readShows(req.user.id),
-        axios.get(`https://api.themoviedb.org/3/discover/tv?${qs.stringify(topQuery)}`)
-    ]);
-
-
-    const shows = data.results.map(({name, id, poster_path}) => ({
-        name,
-        id,
-        following: myShows.has(id),
-        img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : '/images/placeholder.png'
-    }));
-
-    res.json(shows);
+    res.json(await getFormattedShows(`https://api.themoviedb.org/3/discover/tv?${qs.encode(topQuery)}`, req.user.id));
 });
+
 router.get('/:id', async (req, res) => {
-    const id = parseInt(req.params.id);
-    const show = await createShow(req.user, id);
-    res.json(show);
+    const showId = parseInt(req.params.id);
+
+    const [following, {data: show}] = await Promise.all([Show.exists({
+        user_id: req.user.id,
+        show_id: showId
+    }), axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`)]);
+
+    res.json(formatBasicShow(show, following));
 });
 
-async function createShow(user, id) {
-    const {data} = await axios.get(`${baseURL}${id}?${qs.encode(query)}`);
-    const followingShows = await readShows(user.id);
+router.get('/:id/seasons', async (req, res) => {
+    const showId = parseInt(req.params.id);
 
-    const show = {
-        id: data.id,
-        name: data.name,
-        overview: data.overview,
-        watched: followingShows.has(data.id) && followingShows.get(data.id).watched,
-        following: followingShows.has(data.id),
-        numSeasons: data.number_of_seasons,
-        numEpisodes: data.number_of_episodes,
-        img: data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : '/images/placeholder.png'
-    };
+    const {data: show} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`);
 
-    let seasonData = await Promise.all(data.seasons.map(async season => ({
+    let seasons = show.seasons.map(season => ({
         id: season.id,
         name: season.name,
         overview: season.overview,
-        watched: await isSeasonWatched(user, show.id, season.season_number),
-        seasonNum: season.season_number,
-        numEpisodes: season.episode_count,
-        img: season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : show.img
-    })));
+        img: season.poster_path, // TODO: PLACEHOLDER
+        seasonNum: season.season_number
+    }));
 
-    // if the show has a season 0 for specials move it to the end
-    if (seasonData.length && seasonData[0].seasonNum === 0) {
-        const [first, ...rest] = seasonData;
-        seasonData = [...rest, first];
+    if (seasons.length && seasons[0].seasonNum === 0) {
+        const [first, ...rest] = seasons;
+        seasons = [...rest, first];
     }
 
-    show.seasons = seasonData;
+    res.json(seasons);
+});
 
-    for (let season of show.seasons) { // TODO: USE PROMISE.ALL
-        season.episodes = await getEpisodes(user, id, season.seasonNum, season.img);
-    }
+router.get('/:id/seasons/:num/episodes', async (req, res) => {
+    const showId = parseInt(req.params.id);
+    const seasonNum = parseInt(req.params.num);
 
-    return show;
-}
+    const {data: season} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNum}?${qs.encode(query)}`);
 
-async function getEpisodes(user, id, num, img) {
-    const {data} = await axios.get(`${baseURL}${id}/season/${num}?${qs.encode(query)}`);
-
-    return await Promise.all(data.episodes.map(async ep => ({
-        id: ep.id,
-        episodeNum: ep.episode_number,
-        date: Date.parse(ep.air_date.replace(/-/g, '\/')),
-        name: ep.name,
-        overview: ep.overview,
-        watched: await isEpisodeWatched(user, id, num, ep.episode_number),
-        img: ep.still_path ? `https://image.tmdb.org/t/p/original${ep.still_path}` : img
+    res.json(season.episodes.map(episode => ({
+        id: episode.id,
+        episodeNum: episode.episode_number,
+        date: Date.parse(episode.air_date.replace(/-/g, '\/')),
+        name: episode.name,
+        overview: episode.overview,
+        img: `https://image.tmdb.org/t/p/original${episode.still_path}` // TODO: PLACEHOLDER
     })));
-}
-
-async function isSeasonWatched(user, id, num) {
-    const followingShows = await readShows(user.id);
-    if (!followingShows.has(id)) return false;
-    if (!followingShows.get(id).seasons.has(num)) return false;
-    return followingShows.get(id).seasons.get(num).watched;
-}
-
-async function isEpisodeWatched(user, id, sNum, epNum) {
-    const followingShows = await readShows(user.id);
-    if (!followingShows.has(id)) return false;
-    if (!followingShows.get(id).seasons.has(sNum)) return false;
-    if (!followingShows.get(id).seasons.get(sNum).episodes.has(epNum)) return false;
-    return followingShows.get(id).seasons.get(sNum).episodes.get(epNum).watched;
-}
+});
 
 module.exports = router;

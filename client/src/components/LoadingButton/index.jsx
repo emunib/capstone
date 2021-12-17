@@ -19,9 +19,12 @@ function LoadingButton(props) {
                     {...(activeState ? {color: 'yellow'} : {})}
                     {...(clickHandler ? {
                         onClick: async e => {
+                            e.stopPropagation();
+                            e.preventDefault();
+
                             if (!loading) {
                                 setLoading(true);
-                                await clickHandler(e);
+                                await clickHandler();
                                 setLoading(false);
                                 setActiveState(!activeState);
                                 if (buttonRef.current) {

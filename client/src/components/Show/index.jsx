@@ -5,9 +5,9 @@ import {Link} from 'react-router-dom';
 import {Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
 
-function Show({show: showProp}) {
+function Show(props) {
     const [hovering, setHovering] = useState(false);
-    const [show, setShow] = useState(showProp);
+    const [show, setShow] = useState(props.show);
 
     const toggleHover = () => setHovering(!hovering);
 
@@ -15,6 +15,17 @@ function Show({show: showProp}) {
         if (hovering) return 'show-card__title--hover';
         return '';
     };
+
+    async function toggleFollowing() {
+        let data;
+        if (show.following) {
+            data = (await axios.delete(`/myshows/${show.id}`)).data;
+        } else {
+            data = (await axios.post('/myshows', {id: show.id})).data;
+        }
+
+        setShow({...show, following: data.following});
+    }
 
     return (
         <Card as={Link}
@@ -28,17 +39,9 @@ function Show({show: showProp}) {
             <Card.Content>
                 <Card.Header className={titleClass()} textAlign="center">{show.name}</Card.Header>
                 <LoadingButton className="show-card__btn"
-                               icon="plus" clickHandler={
-                    async (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        if (show.following) {
-                            setShow((await axios.delete(`/myshows/${show.id}`)).data);
-                        } else {
-                            setShow((await axios.post('/myshows', {id: show.id})).data);
-                        }
-                    }}
                                active={show.following}
+                               icon="plus"
+                               clickHandler={toggleFollowing}
                 />
             </Card.Content>
         </Card>

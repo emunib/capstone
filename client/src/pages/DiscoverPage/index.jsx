@@ -28,7 +28,7 @@ function SearchPage() {
         let data;
 
         try {
-            data = (await axios.post('/search', {query: query}, {cancelToken: cancelToken.token})).data;
+            data = (await axios.post('/shows/search', {query: query}, {cancelToken: cancelToken.token})).data;
         } catch (error) {
             if (axios.isCancel(error)) {
                 console.log('Search request cancelled', error.message);
@@ -97,7 +97,7 @@ function SearchPage() {
                 <Button fluid={windowWidth < 768} className="discover__load-btn" primary content="Load More"
                         onClick={async e => {
                             if (resultType === 'search') {
-                                const {data} = await axios.post(`/search?page=${page + 1}`, {query: value});
+                                const {data} = await axios.post(`/shows/search?page=${page + 1}`, {query: value});
                                 setShows([...shows, ...data]);
                             } else {
                                 const {data} = await getShows(resultType, page + 1);
