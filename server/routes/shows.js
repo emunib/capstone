@@ -2,7 +2,7 @@ const axios = require('axios');
 const router = require('express').Router();
 const qs = require('querystring');
 const {API_KEY} = process.env;
-const {readShows, formatBasicShow, getFormattedShows} = require('../utils');
+const {formatBasicShow, formatDetailedShow} = require('../utils');
 const Show = require('../database/models/show');
 const querystring = require('querystring');
 
@@ -61,44 +61,49 @@ router.get('/:id', async (req, res) => {
         show_id: showId
     }), axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`)]);
 
-    res.json(formatBasicShow(show, following));
+    res.json(await formatDetailedShow(show, following));
 });
 
-router.get('/:id/seasons', async (req, res) => {
-    const showId = parseInt(req.params.id);
-
-    const {data: show} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`);
-
-    let seasons = show.seasons.map(season => ({
-        id: season.id,
-        name: season.name,
-        overview: season.overview,
-        img: season.poster_path, // TODO: PLACEHOLDER
-        seasonNum: season.season_number
-    }));
-
-    if (seasons.length && seasons[0].seasonNum === 0) {
-        const [first, ...rest] = seasons;
-        seasons = [...rest, first];
-    }
-
-    res.json(seasons);
-});
-
-router.get('/:id/seasons/:num/episodes', async (req, res) => {
-    const showId = parseInt(req.params.id);
-    const seasonNum = parseInt(req.params.num);
-
-    const {data: season} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNum}?${qs.encode(query)}`);
-
-    res.json(season.episodes.map(episode => ({
-        id: episode.id,
-        episodeNum: episode.episode_number,
-        date: Date.parse(episode.air_date.replace(/-/g, '\/')),
-        name: episode.name,
-        overview: episode.overview,
-        img: `https://image.tmdb.org/t/p/original${episode.still_path}` // TODO: PLACEHOLDER
-    })));
-});
+// router.get('/:id/seasons', async (req, res) => {
+//     const showId = parseInt(req.params.id);
+//
+//     const {data: show} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`);
+//
+//     let seasons = show.seasons.map(season => ({
+//         id: season.id,
+//         name: season.name,
+//         overview: season.overview,
+//         img: season.poster_path, // TODO: PLACEHOLDER
+//         seasonNum: season.season_number
+//     }));
+//
+//     if (seasons.length && seasons[0].seasonNum === 0) {
+//         const [first, ...rest] = seasons;
+//         seasons = [...rest, first];
+//     }
+//
+//     res.json(seasons);
+// });
+//
+// router.get('/:id/seasons/:num/episodes', async (req, res) => {
+//     const showId = parseInt(req.params.id);
+//     const seasonNum = parseInt(req.params.num);
+//
+//     const {data: season} = await axios.get(`https://api.themoviedb.org/3/tv/${showId}/season/${seasonNum}?${qs.encode(query)}`);
+//
+//     res.json(season.episodes.map(episode => ({
+//         id: episode.id,
+//         episodeNum: episode.episode_number,
+//         date: Date.parse(episode.air_date.replace(/-/g, '\/')),
+//         name: episode.name,
+//         overview: episode.overview,
+//         img: `https://image.tmdb.org/t/p/original${episode.still_path}` // TODO: PLACEHOLDER
+//     })));
+// });
+async function getFormattedShows(url, userId) {
+    const {data: {results}} = await axios.get(url);
+    const followed = await Promise.all(results.map(show => Show.exists({user_id: userId, show_id: show.id})));
+    return results.map((show, i) => formatBasicShow(show, followed[i]));
+}
 
 module.exports = router;

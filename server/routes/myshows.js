@@ -286,4 +286,35 @@ router.delete('/:id', async (req, res) => {
 //     return responses.map(res => formatBasicShow(res.data));
 // };
 
+router.get('/test', async (req, res) => {
+    const s = new Show({
+        user_id: 100,
+        show_id: 100,
+        name: 'test name',
+        overview: 'test overview',
+        following: true,
+        img: '/some show img',
+        rating: 10.5,
+
+        seasons: [{
+            id: 101,
+            name: 'season name',
+            overview: 'season description',
+            img: '/season img',
+            seasonNum: 0,
+
+            episodes: [{
+                id: 1010,
+                name: 'ep name',
+                overview: 'ep ov',
+                img: 'ep img',
+                episodeNum: 1,
+                date: Date.now()
+            }]
+        }]
+    });
+    await s.save();
+    res.send('done');
+});
+
 module.exports = router;

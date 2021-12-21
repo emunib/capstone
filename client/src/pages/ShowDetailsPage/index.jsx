@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {useParams} from 'react-router-dom';
 import {Divider, Dropdown, Grid, GridColumn, Header, Icon, Image, Item, Loader} from 'semantic-ui-react';
-import episode from '../../components/Episode';
 import Episode from '../../components/Episode';
 import LoadingButton from '../../components/LoadingButton';
 
@@ -11,10 +10,7 @@ function ShowDetailsPage() {
     const {id} = useParams();
     const [show, setShow] = useState();
     const [season, setSeason] = useState();
-    const [seasons, setSeasons] = useState([]);
-    const [episodes, setEpisodes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [epLoading, setEpLoading] = useState(false);
 
     useEffect(() => {
         init();
@@ -22,13 +18,11 @@ function ShowDetailsPage() {
 
     async function init() {
         setLoading(true);
-        const [show, seasons] = await Promise.all([getShow(), getSeasons()]);
-        setShow(show);
-        setSeasons(seasons);
+        const s = await getShow();
+        setShow(s);
 
-        if (seasons.length > 0) {
-            setSeason(seasons[0]);
-            setEpisodes(await getEpisodes(seasons[0].seasonNum));
+        if (s.seasons.length) {
+            setSeason(s.seasons[0]);
         }
         setLoading(false);
     }
@@ -36,23 +30,6 @@ function ShowDetailsPage() {
     async function getShow() {
         const {data} = await axios.get(`/shows/${id}`);
         return data;
-    }
-
-    async function getSeasons() {
-        const {data} = await axios.get(`/shows/${id}/seasons`);
-        return data;
-    }
-
-    async function getEpisodes(num) {
-        const {data} = await axios.get(`/shows/${id}/seasons/${num}/episodes`);
-        return data;
-    }
-
-    async function changeSeason(i) {
-        setEpLoading(true);
-        setSeason(seasons[i]);
-        setEpisodes(await getEpisodes(seasons[i].seasonNum));
-        setEpLoading(false);
     }
 
     async function setEpisodeWatched(id, sNum, eNum, watched) {
@@ -83,17 +60,15 @@ function ShowDetailsPage() {
     }
 
     function renderSeason() {
-        if (seasons.length <= 0) return <></>;
+        if (show.seasons.length <= 0) return <></>;
 
-        const options = seasons.map(({name, seasonNum}, i) => ({key: seasonNum, value: i, text: name}));
+        const options = show.seasons.map(({name, seasonNum}, i) => ({key: seasonNum, value: i, text: name}));
 
         return (
             <div className="show-details__season-header">
                 <Header as="h2" content={season.name} className="show-details__season-title"/>
                 <Dropdown
-                    onChange={(e, {value: i}) => {
-                        changeSeason(i);
-                    }}
+                    onChange={(e, {value: i}) => setSeason(show.seasons[i])}
                     selection
                     placeholder="Choose a season..."
                     options={options}
@@ -111,13 +86,13 @@ function ShowDetailsPage() {
     }
 
     function renderEpisodes() {
-        if (episodes.length <= 0) return <></>;
+        if (!season.episodes.length) return <></>;
 
-        if (epLoading) return <></>;
+        // if (epLoading) return <></>;
 
         return (
             <Item.Group divided stackable>
-                {episodes.map(ep => (
+                {season.episodes.map(ep => (
                     <Episode key={ep.id}
                              episode={{...ep, seasonNum: season.seasonNum, showName: show.name}}
                              withBtn={show.following && ep.date <= Date.now()}
