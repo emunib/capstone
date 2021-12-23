@@ -26,7 +26,6 @@ function LoadingButton(props) {
                                 setLoading(true);
                                 await clickHandler();
                                 setLoading(false);
-                                setActiveState(!activeState);
                                 if (buttonRef.current) {
                                     buttonRef.current.blur();
                                 }

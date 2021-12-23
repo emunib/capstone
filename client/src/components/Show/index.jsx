@@ -17,15 +17,13 @@ function Show(props) {
     };
 
     async function toggleFollowing() {
-        let data;
         if (show.following) {
-            data = (await axios.delete(`/myshows/${show.id}`)).data;
+            const {seasons, ...rest} = (await axios.delete(`/myshows/${show.id}`)).data;
+            setShow(rest);
         } else {
-            data = (await axios.post('/myshows', show)).data;
+            const {seasons, ...rest} = (await axios.post('/myshows', show)).data;
+            setShow(rest);
         }
-        console.log(data);
-
-        setShow({...show, following: data.following});
     }
 
     return (
