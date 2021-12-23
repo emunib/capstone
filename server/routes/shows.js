@@ -2,7 +2,7 @@ const axios = require('axios');
 const router = require('express').Router();
 const qs = require('querystring');
 const {API_KEY} = process.env;
-const {formatBasicShow, formatDetailedShow} = require('../utils');
+const {formatBasicShow, formatDetailedShow, getShow} = require('../utils');
 const Show = require('../database/models/show');
 const querystring = require('querystring');
 
@@ -54,12 +54,10 @@ router.get('/top', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    const userId = req.user.id;
     const showId = parseInt(req.params.id);
 
-    const [following, {data: show}] = await Promise.all([Show.exists({
-        user_id: req.user.id,
-        show_id: showId
-    }), axios.get(`https://api.themoviedb.org/3/tv/${showId}?${qs.encode(query)}`)]);
+    const [following, {data: show}] = await Promise.all([Show.exists({userId, showId}), getShow(showId)]);
 
     res.json(await formatDetailedShow(show, following));
 });
@@ -102,7 +100,7 @@ router.get('/:id', async (req, res) => {
 // });
 async function getFormattedShows(url, userId) {
     const {data: {results}} = await axios.get(url);
-    const followed = await Promise.all(results.map(show => Show.exists({user_id: userId, show_id: show.id})));
+    const followed = await Promise.all(results.map(show => Show.exists({userId, showId: show.id})));
     return results.map((show, i) => formatBasicShow(show, followed[i]));
 }
 

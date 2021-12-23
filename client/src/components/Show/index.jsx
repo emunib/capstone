@@ -21,8 +21,9 @@ function Show(props) {
         if (show.following) {
             data = (await axios.delete(`/myshows/${show.id}`)).data;
         } else {
-            data = (await axios.post('/myshows', {id: show.id})).data;
+            data = (await axios.post('/myshows', show)).data;
         }
+        console.log(data);
 
         setShow({...show, following: data.following});
     }

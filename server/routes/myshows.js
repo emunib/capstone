@@ -1,10 +1,10 @@
 const axios = require('axios');
-const {readShows, writeShows} = require('../utils');
+const {readShows, writeShows, formatBasicShow, getShow, formatDetailedShow} = require('../utils');
 const qs = require('querystring');
 const {API_KEY} = process.env;
 const router = require('express').Router();
 const baseURL = 'https://api.themoviedb.org/3/tv/';
-const queryParams = {
+const query = {
     api_key: API_KEY
 };
 const Show = require('../database/models/show');
@@ -250,16 +250,19 @@ const Show = require('../database/models/show');
 //     const shows = await getAllShows();
 //     res.json(shows);
 // });
+
 router.post('/', async (req, res) => {
     const userId = req.user.id;
     const showId = parseInt(req.body.id);
 
-    try {
-        await (new Show({user_id: userId, show_id: showId})).save();
-        res.json({following: true});
-    } catch (e) {
-        console.log(e);
-        res.json({following: e.code === 11000});
+    const show = await Show.findOne({userId, showId}).exec();
+
+    if (show) {
+        res.json(show.data);
+    } else {
+        const data = await formatDetailedShow(await getShow(showId), true);
+        await (new Show({userId, showId, data}).save());
+        res.json(data);
     }
 });
 
@@ -267,12 +270,11 @@ router.delete('/:id', async (req, res) => {
     const userId = req.user.id;
     const showId = parseInt(req.params.id);
 
-    try {
-        await Show.deleteOne({user_id: userId, show_id: showId});
-        res.json({following: false});
-    } catch (e) {
-        console.log(e);
-        res.json({following: true}); // TODO: error responses for all requests
+    const show = await Show.findOneAndDelete({userId, showId}).exec();
+
+    if (show) {
+        show.data.following = false;
+        res.json(show.data);
     }
 });
 
@@ -285,36 +287,5 @@ router.delete('/:id', async (req, res) => {
 //     const responses = await Promise.all(data.map(({show_id}) => getShow(show_id)));
 //     return responses.map(res => formatBasicShow(res.data));
 // };
-
-router.get('/test', async (req, res) => {
-    const s = new Show({
-        user_id: 100,
-        show_id: 100,
-        name: 'test name',
-        overview: 'test overview',
-        following: true,
-        img: '/some show img',
-        rating: 10.5,
-
-        seasons: [{
-            id: 101,
-            name: 'season name',
-            overview: 'season description',
-            img: '/season img',
-            seasonNum: 0,
-
-            episodes: [{
-                id: 1010,
-                name: 'ep name',
-                overview: 'ep ov',
-                img: 'ep img',
-                episodeNum: 1,
-                date: Date.now()
-            }]
-        }]
-    });
-    await s.save();
-    res.send('done');
-});
 
 module.exports = router;

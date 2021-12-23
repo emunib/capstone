@@ -53,6 +53,11 @@ function formatBasicShow({id, name, overview, poster_path, vote_average}, follow
     };
 }
 
+async function getShow(id) {
+    const {data} = await axios.get(`https://api.themoviedb.org/3/tv/${id}?${qs.encode({api_key})}`);
+    return data;
+}
+
 async function formatDetailedShow(show, following) {
     const detailedShow = formatBasicShow(show, following);
 
@@ -61,6 +66,7 @@ async function formatDetailedShow(show, following) {
 
     return detailedShow;
 }
+
 function formatSeasons(seasons, showImg) {
     seasons = seasons.map(({id, name, overview, poster_path, season_number, episodes}) => ({
         id,
@@ -91,5 +97,4 @@ function formatSeasons(seasons, showImg) {
 }
 
 
-
-module.exports = {readShows, writeShows, formatBasicShow, formatDetailedShow};
+module.exports = {readShows, writeShows, getShow, formatBasicShow, formatDetailedShow};

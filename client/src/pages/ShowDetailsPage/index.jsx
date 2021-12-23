@@ -45,11 +45,11 @@ function ShowDetailsPage() {
     }
 
     async function setShowFollowing() {
-        // if (show.following) {
-        //     await axios.delete(`/myshows/${show.id}`);
-        // } else {
-        //     await axios.post('/myshows', {id: show.id});
-        // }
+        if (show.following) {
+            await axios.delete(`/myshows/${show.id}`);
+        } else {
+            await axios.post('/myshows', {id: show.id});
+        }
         // await loadShow();
     }
 
