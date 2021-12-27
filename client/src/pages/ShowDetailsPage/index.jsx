@@ -22,7 +22,7 @@ function ShowDetailsPage() {
         setShow(s);
 
         if (s.seasons.length) {
-            setSeason(s.seasons[0]);
+            setSeason(0);
         }
         setLoading(false);
     }
@@ -33,30 +33,32 @@ function ShowDetailsPage() {
     }
 
     async function setEpisodeWatched(id, sNum, eNum, watched) {
-        // await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: watched});
-        // await loadShow();
-        // await changeSeason(season.seasonNum);
+        const {data} = await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: watched});
+        setShow(data);
     }
 
     async function setSeasonWatched(id, sNum) {
-        // await axios.patch(`/myshows/${id}/seasons/${sNum}`, {watched: !season.watched});
-        // await loadShow();
-        // await changeSeason(season.seasonNum);
+        const {data} = await axios.patch(`/myshows/${id}/seasons/${sNum}`, {watched: !currentSeason().watched});
+        setShow(data);
     }
 
     async function setShowFollowing() {
         if (show.following) {
-            await axios.delete(`/myshows/${show.id}`);
+            const {data} = await axios.delete(`/myshows/${show.id}`);
+            setShow(data);
         } else {
-            await axios.post('/myshows', {id: show.id});
+            const {data} = await axios.post('/myshows', {id: show.id});
+            setShow(data);
         }
-        // await loadShow();
     }
 
     async function setShowWatched() {
-        // await axios.patch(`/myshows/${id}`, {watched: !show.watched});
-        // await loadShow();
-        // await changeSeason(season.seasonNum);
+        const {data} = await axios.patch(`/myshows/${id}`, {watched: !show.watched});
+        setShow(data);
+    }
+
+    function currentSeason() {
+        return show.seasons[season]
     }
 
     function renderSeason() {
@@ -66,17 +68,17 @@ function ShowDetailsPage() {
 
         return (
             <div className="show-details__season-header">
-                <Header as="h2" content={season.name} className="show-details__season-title"/>
+                <Header as="h2" content={currentSeason().name} className="show-details__season-title"/>
                 <Dropdown
-                    onChange={(e, {value: i}) => setSeason(show.seasons[i])}
+                    onChange={(e, {value: i}) => setSeason(i)}
                     selection
                     placeholder="Choose a season..."
                     options={options}
                     defaultValue={options[0].value}
                 />
-                {show.following && <LoadingButton active={season.watched} icon labelPosition="right"
+                {show.following && <LoadingButton active={currentSeason().watched} icon labelPosition="right"
                                                   clickHandler={async () => {
-                                                      await setSeasonWatched(show.id, season.seasonNum);
+                                                      await setSeasonWatched(show.id, currentSeason().seasonNum);
                                                   }}>
                     <Icon name="checkmark"/>
                     Season
@@ -86,18 +88,18 @@ function ShowDetailsPage() {
     }
 
     function renderEpisodes() {
-        if (!season.episodes.length) return <></>;
+        if (!currentSeason().episodes.length) return <></>;
 
         // if (epLoading) return <></>;
 
         return (
             <Item.Group divided stackable>
-                {season.episodes.map(ep => (
+                {currentSeason().episodes.map(ep => (
                     <Episode key={ep.id}
-                             episode={{...ep, seasonNum: season.seasonNum, showName: show.name}}
+                             episode={{...ep, seasonNum: currentSeason().seasonNum, showName: show.name}}
                              withBtn={show.following && ep.date <= Date.now()}
                              clickHandler={async () => {
-                                 await setEpisodeWatched(show.id, season.seasonNum, ep.episodeNum, !ep.watched);
+                                 await setEpisodeWatched(show.id, currentSeason().seasonNum, ep.episodeNum, !ep.watched);
                              }}/>
                 ))}
             </Item.Group>

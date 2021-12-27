@@ -11,9 +11,10 @@ const showSchema = new Schema({
             id: {type: Number, required: true},
             name: {type: String, required: stringRequired('name')},
             overview: {type: String, required: stringRequired('overview')},
-            following: {type: Boolean, default: true},
+            following: {type: Boolean, required: true},
             img: {type: String, required: true},
             rating: {type: Number, required: true},
+            watched: {type: Boolean, required: true},
 
             seasons: {
                 type: [{
@@ -23,6 +24,7 @@ const showSchema = new Schema({
                     overview: {type: String, required: stringRequired('overview')},
                     img: {type: String, required: true},
                     seasonNum: {type: Number, required: true},
+                    watched: {type: Boolean, required: true},
 
                     episodes: {
                         type: [{
@@ -32,7 +34,8 @@ const showSchema = new Schema({
                             overview: {type: String, required: stringRequired('overview')},
                             img: {type: String, required: true},
                             episodeNum: {type: Number, required: true},
-                            date: {type: Date, required: true}
+                            date: {type: Date, required: true},
+                            watched: {type: Boolean, required: true}
                         }],
                         required: true
                     }

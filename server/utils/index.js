@@ -15,6 +15,7 @@ const readShows = async (user) => {
 
     return JSON.parse(await fs.readFile(path, 'utf8'), reviver);
 };
+
 const writeShows = async (user, data) => {
     const path = `./data/${user}.json`;
     return fs.writeFile(path, JSON.stringify(data, replacer), 'utf8');
@@ -48,6 +49,7 @@ function formatBasicShow({id, name, overview, poster_path, vote_average}, follow
         name,
         overview,
         following,
+        watched: false,
         img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : '/images/placeholder.png',
         rating: vote_average
     };
@@ -73,6 +75,7 @@ function formatSeasons(seasons, showImg) {
         name,
         overview,
         episodes,
+        watched: false,
         img: poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : showImg,
         seasonNum: season_number
     }));
@@ -89,6 +92,7 @@ function formatSeasons(seasons, showImg) {
             date: new Date(air_date.replace(/-/g, '\/')),
             name,
             overview,
+            watched: false,
             img: still_path ? `https://image.tmdb.org/t/p/original${still_path}` : showImg
         }));
     });

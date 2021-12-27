@@ -5,6 +5,7 @@ const {API_KEY} = process.env;
 const {formatBasicShow, formatDetailedShow, getShow} = require('../utils');
 const Show = require('../database/models/show');
 const querystring = require('querystring');
+const {flatten} = require('express/lib/utils');
 
 const query = {
     api_key: API_KEY,
@@ -57,9 +58,14 @@ router.get('/:id', async (req, res) => {
     const userId = req.user.id;
     const showId = parseInt(req.params.id);
 
-    const [following, {data: show}] = await Promise.all([Show.exists({userId, showId}), getShow(showId)]);
+    const followedShow = await Show.findOne({userId, showId});
+    if (followedShow) {
+        res.json(followedShow.data);
+    } else {
+        const show = await getShow(showId);
+        res.json(await formatDetailedShow(show, false));
+    }
 
-    res.json(await formatDetailedShow(show, following));
 });
 
 // router.get('/:id/seasons', async (req, res) => {
