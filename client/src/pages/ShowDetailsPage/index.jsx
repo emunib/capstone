@@ -9,7 +9,7 @@ import LoadingButton from '../../components/LoadingButton';
 function ShowDetailsPage() {
     const {id} = useParams();
     const [show, setShow] = useState();
-    const [season, setSeason] = useState();
+    const [seasonIndex, setSeasonIndex] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -21,9 +21,6 @@ function ShowDetailsPage() {
         const s = await getShow();
         setShow(s);
 
-        if (s.seasons.length) {
-            setSeason(0);
-        }
         setLoading(false);
     }
 
@@ -58,7 +55,7 @@ function ShowDetailsPage() {
     }
 
     function currentSeason() {
-        return show.seasons[season]
+        return show.seasons[seasonIndex];
     }
 
     function renderSeason() {
@@ -70,7 +67,7 @@ function ShowDetailsPage() {
             <div className="show-details__season-header">
                 <Header as="h2" content={currentSeason().name} className="show-details__season-title"/>
                 <Dropdown
-                    onChange={(e, {value: i}) => setSeason(i)}
+                    onChange={(e, {value: i}) => setSeasonIndex(i)}
                     selection
                     placeholder="Choose a season..."
                     options={options}

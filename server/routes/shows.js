@@ -55,6 +55,7 @@ router.get('/top', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+    console.log(req.user);
     const userId = req.user.id;
     const showId = parseInt(req.params.id);
 

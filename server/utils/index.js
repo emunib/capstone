@@ -89,7 +89,7 @@ function formatSeasons(seasons, showImg) {
         season.episodes = season.episodes.map(({id, episode_number, air_date, name, overview, still_path}) => ({
             id,
             episodeNum: episode_number,
-            date: new Date(air_date.replace(/-/g, '\/')),
+            date: Date.parse(air_date.replace(/-/g, '\/')),
             name,
             overview,
             watched: false,
