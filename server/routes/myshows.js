@@ -27,7 +27,7 @@ router.patch('/:id', async (req, res) => {
         show.data.watched = watched;
         show.data.seasons.forEach(season => {
             season.watched = watched;
-            season.episodes.forEach(episode => {
+            season.episodes.filter(ep => ep.date <= Date.now()).forEach(episode => {
                 episode.watched = watched;
             });
         });
@@ -47,7 +47,7 @@ router.patch('/:id/seasons/:num', async (req, res) => {
         const season = show.data.seasons.find(s => s.seasonNum === seasonNum);
 
         season.watched = watched;
-        season.episodes.forEach(episode => {
+        season.episodes.filter(ep => ep.date <= Date.now()).forEach(episode => {
             episode.watched = watched;
         });
 
@@ -70,58 +70,37 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
         const episode = season.episodes.find(ep => ep.episodeNum === episodeNum);
 
         episode.watched = watched;
-        season.watched = season.episodes.every(ep => ep.watched);
+        season.watched = season.episodes.filter(ep => ep.date <= Date.now()).every(ep => ep.watched);
         show.data.watched = show.data.seasons.every(s => s.watched);
 
         await show.save();
         res.json(show.data);
     }
 });
-//
-// // get up next episode for each show
-// router.get('/episodes/next', async (req, res) => {
-//     const followingShows = await readShows(req.user.id);
-//     const nextEpisodes = [];
-//
-//     for (let show of followingShows.values()) {
-//         const episodes = [];
-//
-//         for (const season of show.seasons.values()) {
-//             episodes.push(...Array.from(season.episodes.values(), ep => ({
-//                 ...ep,
-//                 showName: show.name,
-//                 seasonNum: season.seasonNum,
-//                 showId: show.id
-//             })));
-//         }
-//
-//         const episode = episodes.filter(ep => ep.date <= Date.now()).find(ep => !ep.watched);
-//         if (episode) nextEpisodes.push(episode);
-//     }
-//
-//     res.json(nextEpisodes);
-// });
 
-// function setEpisodeWatched(show, seasonNum, episodeNum, watched) {
-//     const episodes = show.seasons.get(seasonNum).episodes;
-//     episodes.get(episodeNum).watched = watched;
-//     show.seasons.get(seasonNum).watched = Array.from(episodes.keys()).every(num => episodes.get(num).watched || episodes.get(num).date > Date.now());
-//     show.watched = Array.from(show.seasons.keys()).every(num => show.seasons.get(num).watched);
-//
-// }
-//
-// function setSeasonWatched(show, seasonNum, watched) {
-//     for (let num of show.seasons.get(seasonNum).episodes.keys()) {
-//         setEpisodeWatched(show, seasonNum, num, watched);
-//     }
-//     show.watched = Array.from(show.seasons.keys()).every(num => show.seasons.get(num).watched);
-// }
-//
-// function setShowWatched(show, watched) {
-//     for (let num of show.seasons.keys()) {
-//         setSeasonWatched(show, num, watched);
-//     }
-// }
+// get up next episode for each show
+router.get('/episodes/next', async (req, res) => {
+    const userId = req.user.id;
+
+    const shows = await Show.find({userId}).lean().exec();
+    const showEpisodes = [];
+
+    shows.forEach(({data: show}) => {
+        const seasonEps = show.seasons.map(sn => sn.episodes
+            .map(ep => ({
+                ...ep,
+                showId: show.id,
+                showName: show.name,
+                seasonNum: sn.seasonNum
+            })).filter(ep => !ep.watched && ep.date <= Date.now()));
+
+        seasonEps.forEach(eps => {
+            if (eps.length) showEpisodes.push(eps[0]);
+        });
+    });
+
+    res.json(showEpisodes);
+});
 
 router.post('/', async (req, res) => {
     const userId = req.user.id;

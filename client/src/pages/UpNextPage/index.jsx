@@ -13,7 +13,6 @@ function UpNextPage() {
         setEpisodes(data);
     }
 
-
     async function init() {
         setLoading(true);
         await getNextEpisodes();
@@ -31,7 +30,7 @@ function UpNextPage() {
                     <Header as="h2" content={ep.showName} textAlign="center"/>
                     <Item.Group divided stackable>
                         <Episode withBtn={true} episode={ep} clickHandler={async () => {
-                            await setWatched(ep.showId, ep.seasonNum, ep.episodeNum);
+                            await setEpisodeWatched(ep.showId, ep.seasonNum, ep.episodeNum);
                         }}/>
                     </Item.Group>
                 </Segment>
@@ -47,11 +46,10 @@ function UpNextPage() {
         }
     }
 
-    async function setWatched(id, sNum, eNum) {
+    async function setEpisodeWatched(id, sNum, eNum) {
         await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: true});
-        getNextEpisodes();
+        await getNextEpisodes();
     }
-
 
     return (
         <>
