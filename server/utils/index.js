@@ -1,6 +1,4 @@
 const axios = require('axios');
-const querystring = require('querystring');
-const Show = require('../database/models/show');
 const qs = require('querystring');
 const fs = require('fs').promises;
 const {API_KEY: api_key} = process.env;

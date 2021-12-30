@@ -54,9 +54,11 @@ function SearchPage() {
         setPage(1);
         setResultType(type);
         if (type === 'trending' || type === 'top') {
+            setLoading(true);
             const {data} = await getShows(type, 1);
             setValue('');
             setShows(data);
+            setLoading(false);
         }
     }
 
