@@ -1,8 +1,8 @@
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {Card, Divider, Header, Icon, Loader} from 'semantic-ui-react';
 import Show from '../../components/Show';
+import {deleteRequest, getRequest, postRequest} from '../../utils/axiosClient';
 
 function MyShowsPage() {
     const [shows, setShows] = useState([]);
@@ -13,7 +13,7 @@ function MyShowsPage() {
     }, []);
 
     async function loadShows() {
-        const {data} = await axios.get('/myshows');
+        const {data} = await getRequest('/myshows');
         setShows(data);
     }
 
@@ -47,9 +47,9 @@ function MyShowsPage() {
                                 e.stopPropagation();
                                 e.preventDefault();
                                 if (show.following) {
-                                    await axios.delete(`/myshows/${show.id}`);
+                                    await deleteRequest(`/myshows/${show.id}`);
                                 } else {
-                                    await axios.post('/myshows', {id: show.id});
+                                    await postRequest('/myshows', {id: show.id});
                                 }
                                 loadShows();
                             }}/>)}

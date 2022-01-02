@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "server for tv tracker app",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ehtasham Munib",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.24.0",
@@ -20,9 +20,11 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "mongoose": "^6.0.14",
-    "nodemon": "^2.0.15",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
     "querystring": "^0.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

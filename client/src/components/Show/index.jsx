@@ -4,6 +4,7 @@ import './style.scss';
 import {Link} from 'react-router-dom';
 import {Card, Image} from 'semantic-ui-react';
 import LoadingButton from '../LoadingButton';
+import {deleteRequest, postRequest} from '../../utils/axiosClient';
 
 function Show(props) {
     const [hovering, setHovering] = useState(false);
@@ -18,10 +19,10 @@ function Show(props) {
 
     async function toggleFollowing() {
         if (show.following) {
-            const {seasons, ...rest} = (await axios.delete(`/myshows/${show.id}`)).data;
+            const {seasons, ...rest} = (await deleteRequest(`/myshows/${show.id}`)).data;
             setShow(rest);
         } else {
-            const {seasons, ...rest} = (await axios.post('/myshows', show)).data;
+            const {seasons, ...rest} = (await postRequest('/myshows', show)).data;
             setShow(rest);
         }
     }

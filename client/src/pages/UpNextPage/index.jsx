@@ -1,15 +1,15 @@
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {Divider, Header, Icon, Item, Loader, Segment} from 'semantic-ui-react';
 import Episode from '../../components/Episode';
+import {getRequest, patchRequest} from '../../utils/axiosClient';
 
 function UpNextPage() {
     const [episodes, setEpisodes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     async function getNextEpisodes() {
-        const {data} = await axios.get(`/myshows/episodes/next`);
+        const {data} = await getRequest('/myshows/episodes/next');
         setEpisodes(data);
     }
 
@@ -47,7 +47,7 @@ function UpNextPage() {
     }
 
     async function setEpisodeWatched(id, sNum, eNum) {
-        await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: true});
+        await patchRequest(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: true});
         await getNextEpisodes();
     }
 

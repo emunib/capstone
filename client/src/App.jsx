@@ -1,7 +1,5 @@
-import './styles/global.scss';
 import 'semantic-ui-css/semantic.min.css';
 import './App.scss';
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import {
     BrowserRouter as Router,
@@ -18,10 +16,11 @@ import NotFoundPage from './pages/NotFoundPage';
 import SearchPage from './pages/DiscoverPage';
 import ShowDetailsPage from './pages/ShowDetailsPage';
 import UpNextPage from './pages/UpNextPage';
+import {getRequest} from './utils/axiosClient';
 
 function App() {
     const [authed, setAuthed] = useState(false);
-    const [loading, setLoading] = useState(true); // TODO: IMPLEMENT THIS, SO YOU DON'T SEE FLASH OF LOGIN FORM
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getUser();
@@ -29,7 +28,7 @@ function App() {
 
     async function getUser() {
         setLoading(true);
-        const {data} = await axios.get('/user');
+        const {data} = await getRequest('/user');
         if (data.user) {
             setAuthed(true);
         } else {
@@ -42,6 +41,7 @@ function App() {
         return (<>
             {authed && <NavBar authHandler={setAuthed}/>}
             <Container as="main" className="main">
+
                 <Switch>
                     <Route exact path="/">
                         {authed ? <Redirect to="/discover"/> : <Redirect to="/login"/>}

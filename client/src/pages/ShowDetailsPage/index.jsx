@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {useParams} from 'react-router-dom';
 import {Divider, Dropdown, Grid, GridColumn, Header, Icon, Image, Item, Loader} from 'semantic-ui-react';
 import Episode from '../../components/Episode';
 import LoadingButton from '../../components/LoadingButton';
+import {deleteRequest, getRequest, patchRequest, postRequest} from '../../utils/axiosClient';
 
 function ShowDetailsPage() {
     const {id} = useParams();
@@ -25,32 +25,32 @@ function ShowDetailsPage() {
     }
 
     async function getShow() {
-        const {data} = await axios.get(`/shows/${id}`);
+        const {data} = await getRequest(`/shows/${id}`);
         return data;
     }
 
     async function setEpisodeWatched(id, sNum, eNum, watched) {
-        const {data} = await axios.patch(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: watched});
+        const {data} = await patchRequest(`/myshows/${id}/seasons/${sNum}/episodes/${eNum}`, {watched: watched});
         setShow(data);
     }
 
     async function setSeasonWatched(id, sNum) {
-        const {data} = await axios.patch(`/myshows/${id}/seasons/${sNum}`, {watched: !currentSeason().watched});
+        const {data} = await patchRequest(`/myshows/${id}/seasons/${sNum}`, {watched: !currentSeason().watched});
         setShow(data);
     }
 
     async function setShowFollowing() {
         if (show.following) {
-            const {data} = await axios.delete(`/myshows/${show.id}`);
+            const {data} = await deleteRequest(`/myshows/${show.id}`);
             setShow(data);
         } else {
-            const {data} = await axios.post('/myshows', {id: show.id});
+            const {data} = await postRequest('/myshows', {id: show.id});
             setShow(data);
         }
     }
 
     async function setShowWatched() {
-        const {data} = await axios.patch(`/myshows/${id}`, {watched: !show.watched});
+        const {data} = await patchRequest(`/myshows/${id}`, {watched: !show.watched});
         setShow(data);
     }
 
@@ -86,8 +86,6 @@ function ShowDetailsPage() {
 
     function renderEpisodes() {
         if (!currentSeason().episodes.length) return <></>;
-
-        // if (epLoading) return <></>;
 
         return (
             <Item.Group divided stackable>

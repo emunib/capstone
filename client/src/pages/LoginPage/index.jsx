@@ -1,8 +1,8 @@
 import {useWindowWidth} from '@react-hook/window-size';
-import axios from 'axios';
 import React, {useState} from 'react';
 import './style.scss';
 import {Button, Divider, Form, Grid, Header, Input, Message, Segment} from 'semantic-ui-react';
+import {postRequest} from '../../utils/axiosClient';
 
 function LoginPage({authHandler}) {
     const [loginEmail, setLoginEmail] = useState('');
@@ -29,25 +29,13 @@ function LoginPage({authHandler}) {
 
         if (isValidEmail && isValidPassword) {
             try {
-                const {data} = await axios.post('/user/login', {username: loginEmail, password: loginPassword});
+                const {data} = await postRequest('/user/login', {username: loginEmail, password: loginPassword});
 
                 if (data.username) {
                     setLoginError(false);
-                    console.log('Get User: There is a user saved in the server session: ');
-                    console.log(data.username);
-                    // history.push('/')
                     authHandler(true);
-
-                    // this.setState({
-                    //     loggedIn: true,
-                    //     username: response.data.user.username
-                    // })
                 } else {
                     console.log('Get user: no user');
-                    // this.setState({
-                    //     loggedIn: false,
-                    //     username: null
-                    // });
                 }
             } catch (e) {
                 if (e.response && e.response.status === 401) {
@@ -67,7 +55,7 @@ function LoginPage({authHandler}) {
         }
 
         if (isValidEmail && isValidPassword && isValidConfirmPassword) {
-            const {data} = await axios.post('/user', {username: signUpEmail, password: signUpPassword});
+            const {data} = await postRequest('/user', {username: signUpEmail, password: signUpPassword});
             if (data.error) {
                 setSignUpSuccess(false);
                 setSignUpError(true);

@@ -1,6 +1,7 @@
 {
   "name": "client",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "client for tv tracker app",
   "private": true,
   "proxy": "http://localhost:8080/",
   "dependencies": {

@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import './style.scss';
 import {Divider, Header, Card, Menu, Input, Loader, Icon, Button} from 'semantic-ui-react';
 import Show from '../../components/Show';
+import {postRequest, getRequest} from '../../utils/axiosClient';
 
 let cancelToken;
 
@@ -28,7 +29,7 @@ function SearchPage() {
         let data;
 
         try {
-            data = (await axios.post('/shows/search', {query: query}, {cancelToken: cancelToken.token})).data;
+            data = (await postRequest('/shows/search', {query: query}, {cancelToken: cancelToken.token})).data;
         } catch (error) {
             if (axios.isCancel(error)) {
                 console.log('Search request cancelled', error.message);
@@ -63,7 +64,7 @@ function SearchPage() {
     }
 
     function getShows(type, page) {
-        return axios.get(`/shows/${type}?page=${page}`);
+        return getRequest(`/shows/${type}?page=${page}`);
     }
 
     function renderLoader() {
@@ -99,7 +100,7 @@ function SearchPage() {
                 <Button fluid={windowWidth < 768} className="discover__load-btn" primary content="Load More"
                         onClick={async e => {
                             if (resultType === 'search') {
-                                const {data} = await axios.post(`/shows/search?page=${page + 1}`, {query: value});
+                                const {data} = await postRequest(`/shows/search?page=${page + 1}`, {query: value});
                                 setShows([...shows, ...data]);
                             } else {
                                 const {data} = await getShows(resultType, page + 1);
