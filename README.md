@@ -3,6 +3,10 @@
 
 A fully responsive web app that allows you to, once logged in to your account, search for tv shows as well as see the top rated and currently trending shows and their details. You can follow shows that shows your are watching. Additionally, you mark shows, seasons, or episodes as watched easily keep track of what you have seen and what is remaining. Lastly, you can see the next unwatched episode in all of your followed shows.
 
+## Demo
+
+A fully functional version of the app can be found at [https://emunib-tv-tracker.netlify.app/](https://emunib-tv-tracker.netlify.app/)
+
 ## Screenshots
 
 ![Show details](docs/screenshots/show.png?raw=true)
@@ -17,7 +21,7 @@ More [screenshots](docs/screenshots/screenshots.md).
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file located in the server dirctory:
+To run this project locally, you will need to add the following environment variables to a .env file located in the server dirctory:
 
 ```
 PORT=8080
