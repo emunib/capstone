@@ -5,7 +5,6 @@ const {API_KEY} = process.env;
 const {formatBasicShow, formatDetailedShow, getShow} = require('../utils');
 const Show = require('../database/models/show');
 const querystring = require('querystring');
-const {flatten} = require('express/lib/utils');
 
 const query = {
     api_key: API_KEY,
@@ -74,7 +73,7 @@ router.get('/:id', async (req, res) => {
                 const followedEp = followedEps.find(fEp => fEp.id === ep.id);
                 ep.watched = followedEp ? followedEp.watched : false;
             });
-            season.watched = season.episodes.filter(ep => ep.date <= Date.now()).every(ep => ep.watched);
+            season.watched = season.episodes.filter(ep => !ep.date || ep.date <= Date.now()).every(ep => ep.watched);
         });
 
         show.watched = show.seasons.every(s => s.watched);

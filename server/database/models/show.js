@@ -34,7 +34,7 @@ const showSchema = new Schema({
                             overview: {type: String, required: stringRequired('overview')},
                             img: {type: String, required: true},
                             episodeNum: {type: Number, required: true},
-                            date: {type: Number, required: true},
+                            date: {type: Number, default: null},
                             watched: {type: Boolean, required: true}
                         }],
                         required: true

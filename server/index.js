@@ -41,7 +41,6 @@ app.use(function (req, res, next) {
     if (req.user) {
         next();
     } else {
-        next();
         res.status(401).json({error: 'Unauthorized'});
     }
 });

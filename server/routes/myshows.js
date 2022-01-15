@@ -27,7 +27,7 @@ router.patch('/:id', async (req, res) => {
         show.data.watched = watched;
         show.data.seasons.forEach(season => {
             season.watched = watched;
-            season.episodes.filter(ep => ep.date <= Date.now()).forEach(episode => {
+            season.episodes.filter(ep => !ep.date || ep.date <= Date.now()).forEach(episode => {
                 episode.watched = watched;
             });
         });
@@ -47,7 +47,7 @@ router.patch('/:id/seasons/:num', async (req, res) => {
         const season = show.data.seasons.find(s => s.seasonNum === seasonNum);
 
         season.watched = watched;
-        season.episodes.filter(ep => ep.date <= Date.now()).forEach(episode => {
+        season.episodes.filter(ep => !ep.date || ep.date <= Date.now()).forEach(episode => {
             episode.watched = watched;
         });
 
@@ -70,7 +70,7 @@ router.patch('/:id/seasons/:sNum/episodes/:eNum', async (req, res) => {
         const episode = season.episodes.find(ep => ep.episodeNum === episodeNum);
 
         episode.watched = watched;
-        season.watched = season.episodes.filter(ep => ep.date <= Date.now()).every(ep => ep.watched);
+        season.watched = season.episodes.filter(ep => !ep.date || ep.date <= Date.now()).every(ep => ep.watched);
         show.data.watched = show.data.seasons.every(s => s.watched);
 
         await show.save();
@@ -92,11 +92,15 @@ router.get('/episodes/next', async (req, res) => {
                 showId: show.id,
                 showName: show.name,
                 seasonNum: sn.seasonNum
-            })).filter(ep => !ep.watched && ep.date <= Date.now()));
+            })).filter(ep => !ep.watched && (!ep.date || ep.date <= Date.now())));
 
-        seasonEps.forEach(eps => {
-            if (eps.length) showEpisodes.push(eps[0]);
-        });
+        for (let i = 0; i < seasonEps.length; i++) {
+            const eps = seasonEps[i];
+            if (eps.length) {
+                showEpisodes.push(eps[0]);
+                break;
+            }
+        }
     });
 
     res.json(showEpisodes);
