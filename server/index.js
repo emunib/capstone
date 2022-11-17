@@ -36,7 +36,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
+app.get('/health', (req, res) => {
     res.sendStatus(200)
 })
 app.use('/user', require('./routes/user'));
